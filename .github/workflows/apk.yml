@@ -1,0 +1,35 @@
+name: Gerar APK do STX Control
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+      - name: Compilar
+        run: gradle :app:assembleRelease --no-daemon --stacktrace
+      - name: Renomear
+        run: cp app/build/outputs/apk/release/app-release.apk STX-Control.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: STX-Control-apk
+          path: STX-Control.apk
+      - name: Publicar versão (link fixo para baixar no tablet)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: STX Control 1.0.${{ github.run_number }}
+          files: STX-Control.apk
+          make_latest: true
