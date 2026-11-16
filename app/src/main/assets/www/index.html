@@ -540,6 +540,128 @@ a.btn{text-decoration:none}
 .pick-it{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);cursor:pointer;text-align:left}
 .pick-it b{font-size:16px} .pick-it small{color:var(--muted)}
 .pick-it.stx{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber-soft) inset}
+/* ---- mini player: volume em barra vertical + voltímetro ---- */
+.vol-btn,.mvolt{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;border-radius:14px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);font-weight:800;cursor:pointer}
+.vol-btn svg,.mvolt svg{width:20px;height:20px}
+.mvolt.ok{color:var(--ok)} .mvolt.warn{color:var(--amber)} .mvolt.bad{color:var(--bad)}
+.mvolt.blink svg{animation:vbl .7s infinite alternate}
+.volpop{position:fixed;z-index:80;width:72px;padding:12px 0;border-radius:22px;background:rgba(16,20,28,.97);border:1px solid var(--line);
+  box-shadow:0 24px 60px rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;gap:10px;animation:valin2 .18s ease-out;--p:50%}
+@keyframes valin2{from{transform:translateY(10px);opacity:0}}
+.volpop b{font-size:18px;color:var(--amber)}
+.vp-btn{width:46px;height:40px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line);color:var(--ink);font-size:22px;font-weight:800;cursor:pointer}
+.vp-track{height:220px;width:46px;display:grid;place-items:center;position:relative}
+.vp-track::before{content:"";position:absolute;left:50%;transform:translateX(-50%);width:10px;top:0;bottom:0;border-radius:6px;
+  background:linear-gradient(to top,var(--amber) var(--p),rgba(255,255,255,.1) var(--p))}
+.vslider{writing-mode:vertical-lr;direction:rtl;height:220px;width:46px;opacity:0;cursor:pointer;margin:0;position:relative;z-index:1;touch-action:none}
+@supports not (writing-mode:vertical-lr){.vslider{transform:rotate(-90deg);width:220px;height:46px}}
+/* ---- player em tela cheia: lista "A seguir" recolhível ---- */
+.fs-qbtn{height:36px}
+.fs-qclose{flex:0 0 40px !important;display:grid;place-items:center}
+.fs-qclose svg{width:20px;height:20px}
+.fs-body{grid-template-columns:minmax(0,1fr) !important}
+.fs-side{display:none}
+.fs.qopen .fs-side{display:flex;position:absolute;right:20px;top:0;bottom:20px;width:min(380px,90vw);z-index:3;background:rgba(12,15,22,.94);backdrop-filter:blur(12px);animation:valin2 .2s ease-out}
+/* paisagem (tablet deitado): capa à esquerda, controles à direita, sem relógio */
+@media (orientation:landscape) and (max-height:900px){
+  .fs-clock{visibility:hidden}
+  .fs-top{padding:10px 18px}
+  .fs-body{padding:0 24px 18px}
+  .fs-stage{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:1fr auto auto auto 1fr;column-gap:40px;row-gap:16px;align-items:center;justify-items:center;text-align:center}
+  .fs-cover{grid-row:1 / span 5;width:min(calc(100vh - 130px),46vw);max-width:520px}
+  .fs-title{grid-row:2;grid-column:2}
+  .seekrow{grid-row:3;grid-column:2;width:100%}
+  .fs-ctl{grid-row:4;grid-column:2}
+  .fs-sub{grid-row:5;grid-column:2;align-self:start}
+  .fs-title h2{font-size:clamp(22px,3vw,36px)}
+}
+/* retrato: lista aparece embaixo, como estava */
+@media (orientation:portrait){
+  .fs-body{grid-template-rows:minmax(0,1fr) auto}
+  .fs .fs-side{display:flex;position:static;width:auto;max-height:34vh;animation:none;background:rgba(16,20,28,.6)}
+  .fs-qbtn,.fs-qclose{display:none !important}
+}
+.mini .side{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+@media (max-width:820px){
+  .mini{grid-template-columns:minmax(0,1fr) auto auto;gap:8px}
+  .mini .side{display:flex !important}
+  .mini .side .icon-btn{display:none}
+  .mvolt{padding:0 8px;font-size:12px} .mvolt svg{display:none}
+  .vol-btn{padding:0 10px}
+}
+@media (max-width:520px){.mvolt{display:none}}
+/* =================== 💎 DIAMANTE =================== */
+.lv.ok{background:rgba(61,220,151,.14);color:var(--ok)}
+.diamond{position:relative;overflow:hidden;border-radius:24px;padding:24px;border:1px solid rgba(124,196,255,.35);
+  background:radial-gradient(120% 140% at 0% 0%,rgba(110,170,255,.22),transparent 55%),radial-gradient(90% 120% at 100% 100%,rgba(196,123,255,.2),transparent 60%),var(--panel);
+  box-shadow:0 30px 70px -30px rgba(110,170,255,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+.diamond::after{content:"";position:absolute;inset:-40% -20% auto auto;width:60%;height:120%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.08) 50%,transparent 60%);transform:rotate(8deg);pointer-events:none}
+.dia-head{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
+.dia-gem{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(145deg,#8fd3ff,#6f8bff 50%,#c47bff);box-shadow:0 12px 30px -8px rgba(111,139,255,.8),inset 0 2px 0 rgba(255,255,255,.4)}
+.dia-gem svg{width:34px;height:34px;color:#fff;stroke-width:2}
+.dia-head small{font-size:11px;font-weight:800;letter-spacing:.16em;color:#8fd3ff}
+.dia-head h2{font-family:var(--font-display);font-size:28px;margin:2px 0}
+.dia-head p{color:var(--muted);margin:0;font-size:14px}
+.dia-price{text-align:right}.dia-price b{display:block;font-size:30px;font-family:var(--font-display);background:linear-gradient(90deg,#8fd3ff,#c47bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dia-price small{color:var(--muted);font-size:12px}
+.dia-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0}
+.dia-col{background:rgba(8,12,18,.55);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.dia-col h4{display:flex;gap:8px;align-items:center;font-size:14.5px;margin:0 0 8px}.dia-col h4 svg{width:18px;height:18px;color:#8fd3ff}
+.dia-col ul{margin:0;padding-left:18px;color:var(--muted);font-size:13px;line-height:1.55}
+.dia-foot{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.dia-foot p{color:var(--muted);font-size:13px;margin:0;max-width:560px}
+.pro-hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:6px 0 10px}
+.pro-big{display:flex;gap:16px;align-items:center;text-align:left;padding:20px;border-radius:22px;border:1px solid rgba(255,178,63,.35);color:var(--ink);cursor:pointer;
+  background:linear-gradient(135deg,rgba(255,138,61,.18),rgba(255,90,54,.06)),var(--panel);box-shadow:0 18px 40px -24px rgba(255,120,60,.6);transition:transform .15s}
+.pro-big.ai{border-color:rgba(196,123,255,.4);background:linear-gradient(135deg,rgba(196,123,255,.2),rgba(111,139,255,.07)),var(--panel);box-shadow:0 18px 40px -24px rgba(160,110,255,.6)}
+.pro-big:active,.tool-card:active{transform:scale(.98)}
+.pro-big b{display:block;font-family:var(--font-display);font-size:17px;letter-spacing:.04em}.pro-big small{color:var(--muted);font-size:13px}
+.tc-ic{width:46px;height:46px;flex:none;border-radius:14px;display:grid;place-items:center;background:rgba(255,178,63,.12);color:var(--amber)}
+.pro-big.ai .tc-ic{background:rgba(196,123,255,.15);color:#c47bff}.tc-ic svg{width:24px;height:24px}
+.tool-grp h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.tool-card{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;text-align:left;padding:14px;border-radius:16px;background:var(--panel);border:1px solid var(--line);color:var(--ink);cursor:pointer;transition:border-color .15s,transform .15s}
+.tool-card .tc-ic{grid-row:1/3;width:40px;height:40px;border-radius:12px}.tool-card .tc-ic svg{width:20px;height:20px}
+.tool-card b{font-size:14.5px}.tool-card small{color:var(--muted);font-size:12px;line-height:1.35}
+.tool-card:hover{border-color:var(--amber)}
+.calc-wrap{display:grid;grid-template-columns:minmax(300px,1fr) minmax(320px,1.15fr);gap:14px;align-items:start}
+@media (max-width:900px){.calc-wrap{grid-template-columns:1fr}.dia-head{grid-template-columns:auto 1fr}.dia-price{grid-column:1/-1;text-align:left}}
+.calc-form{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px 12px}
+.calc-form .field label,.pf label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px;font-weight:600}
+.pf label em{font-style:normal;color:var(--amber);font-weight:700}.pf label i{color:var(--bad);font-style:normal}
+.pf small{display:block;color:var(--muted);font-size:11px;margin-top:4px;opacity:.8}
+.calc-form input,.calc-form select{width:100%}
+.calc-note{color:var(--muted);font-size:12px;margin:12px 0 0}
+.calc-rows{display:flex;flex-direction:column;gap:6px}
+.crow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:#0d1118;border:1px solid var(--line)}
+.crow span{font-size:13.5px;color:var(--muted)}.crow b{font-size:17px;font-family:var(--font-display)}.crow b small{font-size:12px;color:var(--muted);font-family:var(--font-body)}
+.ktag{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.08em;padding:3px 6px;border-radius:6px;white-space:nowrap}
+.k-calc{background:rgba(62,198,224,.14);color:#3ec6e0}.k-est{background:rgba(255,178,63,.14);color:var(--amber)}.k-med{background:rgba(61,220,151,.14);color:var(--ok)}.k-ref{background:rgba(196,123,255,.14);color:#c47bff}
+.calc-alerts{display:flex;flex-direction:column;gap:8px;margin-top:12px}.calc-alerts .tip{grid-template-columns:auto 1fr}
+.calc-mem{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:#0b0f15}
+.calc-mem summary{cursor:pointer;font-weight:700;font-size:13.5px}
+.calc-mem ol{margin:10px 0 0;padding-left:20px;color:var(--muted);font-size:12.5px;line-height:1.6;word-break:break-word}
+.ctable{width:100%;border-collapse:collapse;margin-top:8px;font-size:12.5px}.ctable th,.ctable td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}.ctable th{color:var(--muted);font-weight:700}
+.calc-ref{margin-top:10px}.calc-ref p{color:var(--muted);font-size:11.5px;margin:4px 0}
+.calc-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.calc-miss{display:flex;gap:10px;align-items:center;color:var(--muted);padding:16px;border:1px dashed var(--line);border-radius:14px}.calc-miss svg{width:20px;height:20px;flex:none}
+.sg-head{display:flex;justify-content:space-between;align-items:baseline;margin:4px 0 10px}.sg-f{font-size:40px;font-family:var(--font-display);color:var(--amber)}
+.sg-st{color:var(--muted);font-size:12.5px;align-self:center}
+input[type=range].wide{width:100%}
+.sg-row,.sg-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.btn.hot{background:linear-gradient(135deg,#ff5e7a,#ff3d2e);color:#fff;border-color:transparent}
+.steps{margin:0 0 12px;padding-left:20px;color:var(--muted);font-size:13.5px;line-height:1.6}
+.pj-cat{margin-bottom:10px;padding:14px 16px}.pj-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pj-h h3{display:flex;gap:8px;align-items:center;margin:0;font-size:15px}.pj-h h3 svg{width:18px;height:18px;color:var(--amber)}.pj-h h3 small{color:var(--muted);font-weight:600}
+.pj-it{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;margin-top:8px}
+.pj-txt{text-align:left;padding:10px 12px;border-radius:12px;background:#0d1118;border:1px solid var(--line);color:var(--ink);cursor:pointer}
+.pj-txt b{display:block;font-size:14px}.pj-txt small{color:var(--muted);font-size:12px}
+.pj-res{position:sticky;top:0}
+.ai-chat{display:flex;flex-direction:column;gap:10px;max-height:56vh;min-height:260px;overflow:auto;padding:14px;border-radius:20px;background:var(--panel);border:1px solid var(--line)}
+.ai-msg{max-width:85%;padding:12px 14px;border-radius:16px;font-size:14px;line-height:1.5}
+.ai-msg p{margin:0 0 4px}.ai-msg p:last-child{margin:0}
+.ai-msg.ai{align-self:flex-start;background:linear-gradient(135deg,rgba(196,123,255,.14),rgba(111,139,255,.08));border:1px solid rgba(196,123,255,.25);border-bottom-left-radius:4px}
+.ai-msg.me{align-self:flex-end;background:rgba(255,178,63,.14);border:1px solid rgba(255,178,63,.3);border-bottom-right-radius:4px}
+.ai-in{margin-top:10px}
 
 body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 </style>
@@ -599,6 +721,8 @@ const CONFIG = {
     { id: 2, key: '6m', label: '6 meses', days: 180, price: 'R$ 59,99', note: 'Economize 28%', best: true },
     { id: 3, key: '1a', label: '1 ano',   days: 365, price: 'R$ 149,99', note: 'Um ano sem se preocupar' },
   ],
+  // Plano Diamante: pagamento único, separado do aluguel (o aluguel continua sendo cobrado normalmente)
+  PREMIUM: { id: 20, key: 'diamante', label: 'Plano Diamante (com IA)', price: 'R$ 99,99', note: 'Pagamento único · vale para sempre neste aparelho' },
   SOCIALS: [
     { cls: 'ig',  name: 'Instagram', handle: '@guucds',  url: 'https://instagram.com/guucds',  icon: 'camera' },
     { cls: 'ig2', name: 'Instagram', handle: '@fiatdodj', url: 'https://instagram.com/fiatdodj', icon: 'camera' },
@@ -766,6 +890,7 @@ const Keys = {
     const cfg = Remote.cfg;
     if (cfg && (cfg.revoked || []).includes(k.nonce)) return { ok: false, why: 'Esta chave foi cancelada.' };
     if (License.keys().some(x => this.parse(x)?.nonce === k.nonce)) return { ok: false, why: 'Esta chave já foi usada neste aparelho.' };
+    if (k.plan === CONFIG.PREMIUM.id && License.premium()) return { ok: false, why: 'O Plano Diamante já está liberado neste aparelho.' };
     return { ok: true, key: k };
   },
 };
@@ -862,11 +987,17 @@ const License = {
     const clean = 'STX1' + b32enc(new Uint8Array([...r.key.payload, ...r.key.sig]));
     Store.set('keys', [...this.keys(), clean]);
     Telemetry.ping('active');
-    return { ok: true, plan: r.key.plan, days: r.key.days };
+    return { ok: true, plan: r.key.plan, days: r.key.days, premium: r.key.plan === CONFIG.PREMIUM.id };
   },
+  // Diamante: chave própria (plano 20), não soma dias ao aluguel e não vale durante o teste grátis
+  premium() {
+    const revoked = (Remote.cfg && Remote.cfg.revoked) || [];
+    return this.keys().map(t => Keys.parse(t)).some(k => k && k.plan === CONFIG.PREMIUM.id && !revoked.includes(k.nonce));
+  },
+  premiumUsable() { const st = Gate.st || this.evaluate(); return this.premium() && ['active', 'free', 'trial'].includes(st.state); },
   paidUntil() {
     const revoked = (Remote.cfg && Remote.cfg.revoked) || [];
-    const ks = this.keys().map(t => Keys.parse(t)).filter(k => k && !revoked.includes(k.nonce)).sort((a, b) => a.issued - b.issued);
+    const ks = this.keys().map(t => Keys.parse(t)).filter(k => k && k.plan !== CONFIG.PREMIUM.id && !revoked.includes(k.nonce)).sort((a, b) => a.issued - b.issued);
     let exp = 0; for (const k of ks) exp = Math.max(exp, k.issued) + k.days * DAY;
     return { exp, last: ks[ks.length - 1] };
   },
@@ -892,6 +1023,13 @@ const License = {
     const left = st.until - st.now;
     if (left <= CONFIG.WARN_DAYS * DAY) st.notices.unshift({ kind: 'expiring', text: st.state === 'trial' ? 'Seu teste grátis está acabando.' : 'Seu aluguel está acabando.', until: st.until });
     return st;
+  },
+  waPremium() {
+    const msg = `Olá! Quero o *${CONFIG.PREMIUM.label}* do *${CONFIG.APP}*.\n\n` +
+      `Pagamento único: *${CONFIG.PREMIUM.price}*\n` +
+      `Código do aparelho: *${Device.id}*\n\n` +
+      `Pode me enviar a chave de liberação? Pagamento via PIX.`;
+    return `https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(msg)}`;
   },
   waLink(plan) {
     const msg = `Olá! Quero alugar o *${CONFIG.APP}*.\n\n` +
@@ -2130,6 +2268,9 @@ const I = {
   queue: '<path d="M3 6h12M3 11h12M3 16h7"/><path d="M14 15l6 3.5-6 3.5z" fill="currentColor"/>',
   x: '<path d="M6 6l12 12M18 6L6 18"/>',
   back: '<path d="M15 5l-7 7 7 7"/>',
+  bolt: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+  gem: '<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 3l3 18 3-18M6 3l3 6M18 3l-3 6"/>',
+  calc: '<rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8 7h8M8 12h1.5M11.25 12h1.5M14.5 12H16M8 16h1.5M11.25 16h1.5M14.5 16H16"/>',
   vol: '<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>',
   trash: '<path d="M4 7h16M9.5 7V4.5h5V7M6 7l1 13h10l1-13"/>',
   edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
@@ -2142,20 +2283,27 @@ const I = {
   expand: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
   down: '<path d="M6 9l6 6 6-6"/>',
   shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+  save: '<path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/>',
+  wave: '<path d="M2 12h2l2-6 3 12 3-14 3 16 3-10 2 2h2"/>',
+  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/>',
+  spark: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7"/>',
+  adj: '<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
   refresh: '<path d="M20 11a8 8 0 0 0-14.5-4.5L3.5 9M4 13a8 8 0 0 0 14.5 4.5l2-2.5"/><path d="M3.5 4v5h5M20.5 20v-5h-5"/>',
 };
 const ic = (n, cls = '') => { const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '1.8'); s.setAttribute('stroke-linecap', 'round'); s.setAttribute('stroke-linejoin', 'round'); s.setAttribute('aria-hidden', 'true'); if (cls) s.setAttribute('class', cls); s.innerHTML = I[n] || ''; return s; };
 const iconBtn = (n, label, onclick, cls = '') => h('button', { class: 'icon-btn ' + cls, 'aria-label': label, title: label, onclick }, ic(n));
 
 const TABS = [
-  ['lib', 'Biblioteca', 'lib'], ['pls', 'Playlists', 'pls'], ['favs', 'Favoritos', 'star'], ['hist', 'Histórico', 'hist'],
-  ['dsp', 'Ajustes', 'adj'], ['lic', 'Licença', 'key'], ['about', 'Sobre', 'info'],
+  ['lib', 'Biblioteca', 'lib'], ['pls', 'Playlists', 'pls'],
+  ['dsp', 'Ajustes', 'adj'], ['ia', 'Ajustes IA', 'spark'], ['pro', 'Diamante', 'gem'], ['lic', 'Licença', 'key'], ['about', 'Sobre', 'info'],
 ];
 
 const UI = {
   nav: Store.get('nav', null) || { tab: 'lib', stacks: { lib: [{ v: 'lib' }], pls: [{ v: 'pls' }], favs: [{ v: 'favs' }], hist: [{ v: 'hist' }], lic: [{ v: 'lic' }], about: [{ v: 'about' }] } },
   q: '', flat: Store.get('flat', false), layout: Store.get('layout', 'covers'), lic: null, fsTab: 'next',
   init() {
+    if (!TABS.some(t => t[0] === this.nav.tab)) this.nav.tab = 'lib';
     this.main = $('#main'); this.rail = $('#rail'); this.banners = $('#banners'); this.toasts = $('#toasts');
     TABS.forEach(([id, label, icon]) => {
       if (id === 'lic') this.rail.append(h('div', { class: 'sp' }));
@@ -2181,12 +2329,16 @@ const UI = {
   go(view) { this.stack().push({ ...view, scroll: 0 }); this._saveNav(); this.render(0); },
   back() { const s = this.stack(); if (s.length > 1) s.pop(); this._saveNav(); this.render(this.cur().scroll || 0); },
   goRoot(n) { const s = this.stack(); s.length = n + 1; this._saveNav(); this.render(this.cur().scroll || 0); },
-  switchTab(t) { this.nav.tab = t; this._saveNav(); this.render(this.cur().scroll || 0); },
+  // tocar na aba em que já está = volta para o início dela (limpa a busca, sobe a lista)
+  switchTab(t) {
+    if (t === this.nav.tab) { this.nav.stacks[t] = [{ v: t }]; if (t === 'lib') this.q = ''; this._saveNav(); this.render(0); this.main.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    this.nav.tab = t; this._saveNav(); this.render(this.cur().scroll || 0);
+  },
   render(scroll) {
     const c = this.cur();
     document.querySelectorAll('.rail button').forEach(b => b.classList.toggle('on', b.id === 'tab-' + this.nav.tab));
     this.main.replaceChildren();
-    const fn = { lib: 'vLib', genre: 'vGenre', folder: 'vFolder', pls: 'vPls', pl: 'vPl', favs: 'vFavs', hist: 'vHist', lic: 'vLic', about: 'vAbout', dsp: 'vDsp' }[c.v];
+    const fn = { lib: 'vLib', genre: 'vGenre', folder: 'vFolder', pls: 'vPls', pl: 'vPl', favs: 'vFavs', hist: 'vHist', lic: 'vLic', about: 'vAbout', dsp: 'vDsp', ia: 'vIa', pro: 'vPro', tool: 'vTool', proj: 'vProj' }[c.v];
     try { this[fn](c); } catch (e) { console.error(e); this.main.append(h('div', { class: 'empty' }, 'Algo deu errado nesta tela.')); }
     const y = scroll != null ? scroll : this.main.scrollTop;
     requestAnimationFrame(() => { this.main.scrollTop = y; });
@@ -2451,6 +2603,8 @@ const UI = {
           this.activateBox())),
       h('div', { class: 'section-title' }, h('h2', {}, 'Planos de aluguel'), h('small', {}, 'Pagamento via PIX pelo WhatsApp')),
       this.plansBox(),
+      h('div', { class: 'section-title' }, h('h2', {}, 'Plano Diamante · com IA'), h('small', {}, 'Pagamento único, por fora do aluguel')),
+      this.diamondCard(),
       h('div', { class: 'section-title' }, h('h2', {}, 'Fale comigo')),
       this.socials());
     Gate.paintCount();
@@ -2470,7 +2624,8 @@ const UI = {
         if (!r.ok) { msg.textContent = r.why; msg.style.color = 'var(--bad)'; return; }
         ta.value = ''; Gate.tick(true);
         const st = Gate.st;
-        this.modal({ title: 'Ativado!', text: `Seu ${CONFIG.APP} está liberado até ${fmtDate(st.until)}. Obrigado pela confiança.`, actions: [{ label: 'Continuar', kind: 'primary' }] });
+        if (r.premium) this.modal({ title: '💎 Plano Diamante liberado!', text: 'As calculadoras de engenharia, as ferramentas de medição e o consultor com IA já estão na aba Diamante. Ele continua funcionando enquanto o seu aluguel estiver em dia.', actions: [{ label: 'Abrir Diamante', kind: 'primary', onClick: () => this.switchTab('pro') }] });
+        else this.modal({ title: 'Ativado!', text: `Seu ${CONFIG.APP} está liberado até ${fmtDate(st.until)}. Obrigado pela confiança.`, actions: [{ label: 'Continuar', kind: 'primary' }] });
         if (this.cur().v === 'lic') this.refresh();
       } }, ic('key'), 'Ativar chave'), msg);
   },
@@ -2522,8 +2677,29 @@ const UI = {
         h('button', { class: 'play-btn', id: 'm-play', 'aria-label': 'Tocar ou pausar', onclick: () => Player.toggle() }, ic('play')),
         iconBtn('next', 'Próxima', () => Player.next())),
       h('div', { class: 'side' },
-        h('label', { class: 'vol' }, ic('vol'), h('input', { type: 'range', id: 'm-vol', min: 0, max: 40, value: Player.vol, 'aria-label': 'Volume', oninput: e => { Player.setVolume(+e.target.value); const fv = $('#f-vol'); if (fv) fv.value = e.target.value; } })),
+        h('button', { class: 'mvolt num', id: 'm-volt', onclick: () => this.voltPanel(), 'aria-label': 'Voltímetro' }, ic('bolt'), h('span', {}, '-- V')),
+        h('button', { class: 'vol-btn', id: 'm-volbtn', onclick: e => { e.stopPropagation(); this.volPop(); }, 'aria-label': 'Volume' }, ic('vol'), h('span', { class: 'num', id: 'm-voln' }, String(Player.vol))),
+        h('input', { type: 'range', id: 'm-vol', min: 0, max: 40, value: Player.vol, hidden: true }),
         iconBtn('expand', 'Tela cheia', () => this.openFs())));
+  },
+  // volume do mini player: barra vertical que abre ao tocar
+  volPop() {
+    let pop = $('#volpop'); if (pop) { pop.remove(); return; }
+    const max = 40, set = v => { v = Math.max(0, Math.min(max, v)); Player.setVolume(v); inp.value = v; n.textContent = v; $('#m-voln').textContent = v; const fv = $('#f-vol'); if (fv) fv.value = v; $('#m-vol').value = v; fill(); clearTimeout(this._vpt); this._vpt = setTimeout(() => pop.remove(), 4000); };
+    const n = h('b', { class: 'num' }, String(Player.vol));
+    const inp = h('input', { type: 'range', min: 0, max, step: 1, value: Player.vol, class: 'vslider', 'aria-label': 'Volume', oninput: e => set(+e.target.value) });
+    const fill = () => pop.style.setProperty('--p', (inp.value / max * 100) + '%');
+    pop = h('div', { id: 'volpop', class: 'volpop', onclick: e => e.stopPropagation() },
+      h('button', { class: 'vp-btn', onclick: () => set(+inp.value + 1), 'aria-label': 'Aumentar' }, '+'),
+      h('div', { class: 'vp-track' }, inp), n,
+      h('button', { class: 'vp-btn', onclick: () => set(+inp.value - 1), 'aria-label': 'Abaixar' }, '−'));
+    document.body.append(pop); fill();
+    const r = $('#m-volbtn').getBoundingClientRect();
+    pop.style.left = Math.min(window.innerWidth - 80, Math.max(8, r.left + r.width / 2 - 36)) + 'px';
+    pop.style.bottom = (window.innerHeight - r.top + 10) + 'px';
+    const off = () => { pop.remove(); document.removeEventListener('click', off); };
+    setTimeout(() => document.addEventListener('click', off), 0);
+    this._vpt = setTimeout(() => pop.remove(), 5000);
   },
   paintNow() {
     const i = Player.idx, f = Library.folderOfSong(i);
@@ -2566,7 +2742,10 @@ const UI = {
       h('div', { class: 'fs-top' },
         h('button', { class: 'btn ghost fs-close', onclick: () => this.closeFs() }, ic('down'), 'Minimizar'),
         h('div', { class: 'fs-clock' }, h('div', { class: 't num', 'data-clock': '' }, '--:--'), h('div', { class: 'd', 'data-date': '' })),
-        h('div', { style: { justifySelf: 'end', display: 'flex', gap: '8px' } }, h('span', { class: 'pill', id: 'f-conn' }, h('i'), 'Demonstração'))),
+        h('div', { style: { justifySelf: 'end', display: 'flex', gap: '8px', alignItems: 'center' } },
+          h('button', { class: 'pill btn', id: 'f-volt', onclick: () => this.voltPanel() }, h('i'), '-- V'),
+          h('span', { class: 'pill', id: 'f-conn' }, h('i'), 'Demonstração'),
+          h('button', { class: 'btn ghost fs-qbtn', onclick: () => { fs.classList.toggle('qopen'); Store.set('fsq', fs.classList.contains('qopen')); } }, ic('queue'), 'A seguir'))),
       h('div', { class: 'fs-body' },
         h('div', { class: 'fs-stage' },
           h('div', { class: 'fs-cover', id: 'f-cover' }, h('div', { class: 'disc' }), h('b', {}, '♪')),
@@ -2585,9 +2764,11 @@ const UI = {
             h('label', { class: 'vol' }, ic('vol'), h('input', { type: 'range', id: 'f-vol', min: 0, max: 40, value: Player.vol, 'aria-label': 'Volume', oninput: e => { Player.setVolume(+e.target.value); $('#m-vol').value = e.target.value; } })))),
         h('aside', { class: 'fs-side' },
           h('div', { class: 'tabs', role: 'tablist' },
+            h('button', { class: 'fs-qclose', onclick: () => { fs.classList.remove('qopen'); Store.set('fsq', false); }, 'aria-label': 'Fechar lista' }, ic('down')),
             h('button', { id: 'fst-next', class: 'on', onclick: () => { this.fsTab = 'next'; this.paintQueue(); } }, 'A seguir'),
             h('button', { id: 'fst-hist', onclick: () => { this.fsTab = 'hist'; this.paintQueue(); } }, 'Tocadas')),
           h('div', { class: 'q', id: 'f-queue' }))));
+    if (Store.get('fsq', false)) fs.classList.add('qopen');
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && fs.classList.contains('open')) this.closeFs(); });
   },
   paintQueue() {
@@ -2772,9 +2953,13 @@ const UI = {
   // ---------------- voltímetro ----------------
   paintVolt() {
     const el = $('#volt'); if (!el) return; const v = Player.volt;
-    if (v == null) { el.classList.add('hidden'); return; }
-    el.classList.remove('hidden'); el.className = 'pill btn ' + Volt.level(v) + (Volt.state !== 'ok' ? ' blink' : '');
-    el.replaceChildren(h('i'), fmtV(v));
+    const real = App.transport instanceof BleTransport && App.transport.connected;
+    const cls = v == null ? '' : Volt.level(v) + (Volt.state !== 'ok' ? ' blink' : '');
+    el.classList.toggle('hidden', v == null && !real);
+    el.className = 'pill btn ' + cls + (v == null && !real ? ' hidden' : '');
+    el.replaceChildren(h('i'), v == null ? 'Volts --' : fmtV(v));
+    const fv = $('#f-volt'); if (fv) { fv.className = 'pill btn ' + cls; fv.replaceChildren(h('i'), v == null ? '-- V' : fmtV(v)); }
+    const mv = $('#m-volt'); if (mv) { mv.className = 'mvolt num ' + cls; mv.lastChild.textContent = v == null ? '-- V' : fmtV(v); }
     const big = $('#vbig'); if (big) { big.textContent = fmtV(v); big.className = 'vbig ' + Volt.level(v); $('#vmm').textContent = `mín ${fmtV(Volt.min)} · máx ${fmtV(Volt.max)} · leitura do aparelho ${fmtV(Player.voltRaw)}`; $('#vspark').replaceChildren(this.voltSpark()); }
   },
   voltSpark() {
@@ -2936,6 +3121,7 @@ const App = {
     const map = { none: ['bad', 'Toque para conectar'], demo: ['warn', 'Demonstração'], connected: ['ok', tr && tr.name], connecting: ['warn', 'Conectando…'], reconnecting: ['warn', 'Reconectando…'], off: ['bad', 'Desconectado'] };
     const [k, t] = map[st] || ['warn', st];
     for (const id of ['#conn', '#f-conn']) { const el = $(id); if (el) { el.className = (id === '#conn' ? 'pill btn ' : 'pill ') + k; el.replaceChildren(h('i'), t); } }
+    try { UI.paintVolt(); } catch {}
   },
   useTransport(tr) {
     this.transport = tr;
@@ -3065,12 +3251,12 @@ Object.assign(I, {
 const DSP_PAGES = [
   ['outs', 'Saídas', 'adj'], ['xo', 'Crossover', 'wave'], ['peq', 'EQ paramétrico', 'wave'], ['geq', 'EQ gráfico', 'bars'],
   ['lim', 'Limitador', 'shield'], ['route', 'Roteamento', 'route'], ['in', 'Entradas', 'inp'], ['extra', 'Extras', 'plus'],
-  ['presets', 'Presets', 'save'], ['ai', 'Assistente IA', 'spark', 'ai'],
+  ['presets', 'Presets', 'save'],
 ];
 const fmtHz = f => { if (f < 1000) return String(Math.round(f)); const v = f / 1000; return (Number.isInteger(v) ? String(v) : v.toFixed(1).replace('.', ',')) + 'k'; };
 
 Object.assign(UI, {
-  dspPage: Store.get('dspPage', 'outs'), dspCh: Store.get('dspCh', 0), peqSel: 0,
+  dspPage: Store.get('dspPage', 'outs') === 'ai' ? 'outs' : Store.get('dspPage', 'outs'), dspCh: Store.get('dspCh', 0), peqSel: 0,
 
   vDsp() {
     const page = this.dspPage;
@@ -3385,6 +3571,19 @@ Object.assign(UI, {
     if (App.transport instanceof BleTransport && !(await this.confirm('Enviar tudo para o processador?', 'Todas as regulagens da tela serão gravadas no aparelho, substituindo as atuais. Use com volume baixo.'))) return;
     await this.withProgress('Enviando todas as regulagens', cb => Dsp.sendAll(cb)); this.toast('Todas as regulagens foram enviadas.', 'ok'); },
 
+  /* ---------- ABA AJUSTES IA ---------- */
+  vIa() {
+    this.main.append(h('div', { class: 'view-head' },
+      h('div', {}, h('h1', {}, 'Ajustes com IA'), h('p', {}, 'Revisão automática da regulagem, medição pelo microfone e correção do equalizador.')),
+      h('div', { style: { display: 'flex', gap: '10px', flexWrap: 'wrap' } },
+        h('button', { class: 'btn', onclick: () => this.voltPanel() }, ic('bolt'), 'Voltímetro'),
+        h('button', { class: 'btn', onclick: () => { this.nav.tab = 'dsp'; this.render(0); } }, ic('adj'), 'Ir para Ajustes'))));
+    const body = h('div'); this.main.append(body);
+    if (App.transport instanceof BleTransport && !Dsp.synced) body.append(h('div', { class: 'tip', style: { marginBottom: '14px' } }, h('span', { class: 'lv a' }, 'ATENÇÃO'),
+      h('div', {}, h('b', {}, 'Regulagens ainda não lidas do processador'), h('small', {}, 'A revisão usa os valores da tela. Leia as regulagens para ela analisar o que está gravado no aparelho.')),
+      h('button', { class: 'btn', onclick: () => App.syncDsp() }, ic('dl'), 'Ler agora')));
+    this.pAi(body);
+  },
   /* ---------- ASSISTENTE ---------- */
   pAi(body) {
     const s = Dsp.s;
@@ -3464,6 +3663,1123 @@ Object.assign(UI, {
     calc();
   },
 });
+
+/* =========================================================================
+   💎 PLANO DIAMANTE — central de engenharia elétrica e áudio
+   Calculadoras com memória de cálculo, alertas e separação entre
+   valores CALCULADOS, ESTIMADOS, MEDIDOS e de REFERÊNCIA.
+   ========================================================================= */
+
+// ---------- constantes físicas e de referência ----------
+const MAT = {
+  cu:  { n: 'Cobre',                 rho: 0.01724, a: 0.00393 },   // Ω·mm²/m a 20 °C (IEC 60028)
+  cca: { n: 'CCA (alumínio cobreado)', rho: 0.0278, a: 0.00403 }, // ~62% IACS
+  al:  { n: 'Alumínio',              rho: 0.0282,  a: 0.00403 },
+};
+const BAT_TECH = {
+  agm:    { n: 'Chumbo-ácido AGM',      dod: 50, k: 1.10, cmax: 1.0, cyc: '300–600',   whkg: '30–40',   vfull: 12.8, lead: true },
+  flood:  { n: 'Chumbo-ácido comum',    dod: 50, k: 1.25, cmax: 0.5, cyc: '200–300',   whkg: '30–35',   vfull: 12.7, lead: true },
+  carbon: { n: 'Chumbo-carbono',        dod: 60, k: 1.10, cmax: 1.0, cyc: '1.000–2.000', whkg: '30–40', vfull: 12.8, lead: true },
+  lfp:    { n: 'Lítio LiFePO4',         dod: 90, k: 1.03, cmax: 1.0, cyc: '2.000–5.000', whkg: '90–160', vfull: 14.4 },
+  nmc:    { n: 'Lítio NMC (Li-íon)',    dod: 80, k: 1.03, cmax: 1.0, cyc: '500–1.500',  whkg: '150–250', vfull: 16.8 },
+};
+const SEC_MM2 = [1.5, 2.5, 4, 6, 10, 16, 21, 25, 35, 42, 50, 53, 70, 95, 120, 150, 185, 240, 300];
+const FUSES = [10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 100, 125, 150, 175, 200, 225, 250, 300, 350, 400, 500, 600, 750, 1000];
+const J_CABLE = 4;   // A/mm² — referência prática p/ cabo de cobre flexível em uso contínuo
+const J_BUS = 2;     // A/mm² — referência prática p/ barramento de cobre sem ventilação forçada
+const REGIMES = [
+  ['100', 'Senoidal contínuo (pior caso / teste)'], ['50', 'Competição, música muito comprimida'],
+  ['25', 'Som alto com música comum'], ['12.5', 'Volume moderado'],
+];
+const awg2mm2 = n => { const d = 0.127 * Math.pow(92, (36 - n) / 39); return Math.PI * d * d / 4; };
+const mm2awg = a => { const d = Math.sqrt(4 * a / Math.PI); return 36 - 39 * Math.log(d / 0.127) / Math.log(92); };
+const awgName = n => n <= -1 ? `${-n + 1}/0` : String(n);
+const AWG_LIST = [-3, -2, -1, 0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 18];   // -3 = 4/0, -2 = 3/0, -1 = 2/0, 0 = 1/0
+const awgLabel = n => n === -3 ? '4/0' : n === -2 ? '3/0' : n === -1 ? '2/0' : n === 0 ? '1/0' : String(n);
+const awgArea = n => awg2mm2(n);
+
+// ---------- formatação ----------
+const nf = (v, d = 2) => v == null || !isFinite(v) ? '—' : Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: d });
+const nfx = (v, d = 2) => v == null || !isFinite(v) ? '—' : Number(v).toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const nextUp = (list, v) => list.find(x => x >= v - 1e-9) ?? null;
+const rhoAt = (m, t) => MAT[m].rho * (1 + MAT[m].a * ((t ?? 20) - 20));
+
+// ---------- definição das calculadoras ----------
+// campo: [chave, rótulo, unidade, opções] · opções: need (obrigatório), def (valor de referência), sel (lista), step, hint
+const F = (k, l, u, o = {}) => ({ k, l, u, ...o });
+const CALCS = {};
+const defCalc = c => { CALCS[c.id] = c; };
+
+/* 1.1 BATERIAS */
+defCalc({
+  id: 'bat', cat: 'ele', grp: 'Baterias', name: 'Banco de baterias', icon: 'bolt',
+  desc: 'Série/paralelo, tensão, Ah, Wh, autonomia, corrente de descarga e dimensionamento.',
+  fields: [
+    F('tech', 'Tecnologia', '', { sel: Object.entries(BAT_TECH).map(([k, t]) => [k, t.n]), def: 'agm' }),
+    F('vb', 'Tensão nominal de cada bateria', 'V', { need: 1, ph: 'ex.: 12' }),
+    F('ah', 'Capacidade de cada bateria (C20)', 'Ah', { need: 1, ph: 'ex.: 100' }),
+    F('s', 'Baterias em série', 'un.', { def: 1, step: 1 }),
+    F('p', 'Fileiras em paralelo', 'un.', { def: 1, step: 1 }),
+    F('load', 'Consumo da carga', 'W', { ph: 'opcional' }),
+    F('iload', 'ou corrente da carga', 'A', { ph: 'opcional' }),
+    F('dod', 'Descarga máxima permitida (DoD)', '%', { ph: 'padrão da tecnologia' }),
+    F('hours', 'Autonomia desejada (para dimensionar)', 'h', { ph: 'opcional' }),
+  ],
+  run(v, R) {
+    const T = BAT_TECH[v.tech] || BAT_TECH.agm, s = v.s || 1, p = v.p || 1, dod = (v.dod || T.dod) / 100;
+    const Vt = v.vb * s, Aht = v.ah * p, Wh = Vt * Aht, Whu = Wh * dod;
+    R.row('Tensão total do banco', Vt, 'V', 'calc', 2, `V = V_bateria × série = ${nf(v.vb)} × ${s} = ${nf(Vt)} V`);
+    R.row('Capacidade total', Aht, 'Ah', 'calc', 1, `Ah = Ah_bateria × paralelo = ${nf(v.ah)} × ${p} = ${nf(Aht)} Ah`);
+    R.row('Energia armazenada', Wh, 'Wh', 'calc', 0, `E = V × Ah = ${nf(Vt)} × ${nf(Aht)} = ${nf(Wh, 0)} Wh`);
+    R.row('Energia utilizável', Whu, 'Wh', 'est', 0, `E_útil = E × DoD = ${nf(Wh, 0)} × ${nf(dod * 100, 0)}% = ${nf(Whu, 0)} Wh`);
+    R.row('Total de baterias', s * p, 'un.', 'calc', 0);
+    R.ref(`DoD ${nf(dod * 100, 0)}% ${v.dod ? '(informado)' : '(padrão para ' + T.n + ')'} · expoente de Peukert ${nf(T.k)} (típico)`);
+    let I = v.iload, P = v.load;
+    if (!I && P) I = P / Vt; if (!P && I) P = I * Vt;
+    if (I) {
+      R.row('Corrente de descarga', I, 'A', v.iload ? 'calc' : 'calc', 1, v.iload ? '' : `I = P / V = ${nf(P)} / ${nf(Vt)} = ${nf(I, 1)} A`);
+      const cr = I / Aht;
+      R.row('Taxa de descarga', cr, 'C', 'calc', 2, `C = I / Ah = ${nf(I, 1)} / ${nf(Aht)} = ${nf(cr, 2)} C`);
+      const t1 = Whu / P;
+      R.row('Autonomia (cálculo simples)', t1 * 60, 'min', 'est', 0, `t = E_útil / P = ${nf(Whu, 0)} / ${nf(P, 0)} = ${nf(t1, 2)} h`);
+      if (T.lead) {
+        const tp = 20 * Math.pow(Aht / (I * 20), T.k) * dod;
+        R.row('Autonomia com efeito Peukert', tp * 60, 'min', 'est', 0, `t = 20 h × (Ah / (I × 20))^k × DoD = 20 × (${nf(Aht)} / ${nf(I * 20, 0)})^${nf(T.k)} × ${nf(dod, 2)} = ${nf(tp, 2)} h`);
+      }
+      if (cr > T.cmax) R.alert('a', `Descarga de ${nf(cr, 2)} C acima do recomendado para ${T.n} (~${nf(T.cmax)} C contínuo). Aquece, cai a tensão e reduz a vida útil. Aumente as fileiras em paralelo.`);
+      if (cr > T.cmax * 3) R.alert('p', 'Corrente muito alta para este banco: risco de aquecimento forte. Confira a corrente máxima no datasheet da bateria.');
+    }
+    if (v.hours && P) {
+      const need = P * v.hours / (Vt * dod), np = Math.ceil(need / v.ah - 1e-9);
+      R.row('Capacidade necessária', need, 'Ah', 'calc', 0, `Ah = P × h / (V × DoD) = ${nf(P, 0)} × ${nf(v.hours)} / (${nf(Vt)} × ${nf(dod, 2)}) = ${nf(need, 0)} Ah`);
+      R.row('Fileiras em paralelo necessárias', np, 'un.', 'calc', 0, `n = ${nf(need, 0)} / ${nf(v.ah)} → ${np}`);
+      R.row('Baterias no total', np * s, 'un.', 'calc', 0);
+    }
+    if (Vt > 60) R.alert('p', `Banco com ${nf(Vt)} V CC: acima de 60 V há risco de choque. Use proteção nos terminais, chave geral e fusível.`);
+    if (p > 1) R.alert('d', 'Em paralelo use baterias iguais (mesma marca, idade e carga) e cabos de mesmo comprimento até o barramento.');
+    if (!R.alerts.length) R.alert('ok', 'Banco dentro dos limites informados.');
+    R.table('Comparação entre tecnologias (valores típicos de fabricantes)', ['Tecnologia', 'DoD usual', 'Ciclos', 'Wh/kg', 'Descarga contínua'],
+      Object.values(BAT_TECH).map(t => [t.n, t.dod + '%', t.cyc, t.whkg, '~' + nf(t.cmax) + ' C']));
+  },
+});
+
+/* 1.2 SISTEMAS HV */
+defCalc({
+  id: 'ohm', cat: 'ele', grp: 'Sistemas HV', name: 'Tensão, corrente e potência', icon: 'calc',
+  desc: 'Preencha dois valores quaisquer e o app calcula os outros (lei de Ohm e potência).',
+  fields: [F('V', 'Tensão', 'V', { ph: 'opcional' }), F('I', 'Corrente', 'A', { ph: 'opcional' }), F('P', 'Potência', 'W', { ph: 'opcional' }), F('R', 'Resistência', 'Ω', { ph: 'opcional' })],
+  run(v, R) {
+    let { V, I, P, R: r } = v; const n = [V, I, P, r].filter(x => x != null).length;
+    if (n < 2) return R.need('Preencha pelo menos dois valores.');
+    const how = [];
+    if (V != null && I != null) { P = P ?? V * I; r = r ?? V / I; how.push('P = V × I', 'R = V / I'); }
+    else if (V != null && r != null) { I = V / r; P = V * V / r; how.push('I = V / R', 'P = V² / R'); }
+    else if (V != null && P != null) { I = P / V; r = V * V / P; how.push('I = P / V', 'R = V² / P'); }
+    else if (I != null && r != null) { V = I * r; P = I * I * r; how.push('V = I × R', 'P = I² × R'); }
+    else if (I != null && P != null) { V = P / I; r = P / (I * I); how.push('V = P / I', 'R = P / I²'); }
+    else if (P != null && r != null) { V = Math.sqrt(P * r); I = Math.sqrt(P / r); how.push('V = √(P × R)', 'I = √(P / R)'); }
+    R.row('Tensão', V, 'V', 'calc', 3); R.row('Corrente', I, 'A', 'calc', 3); R.row('Potência', P, 'W', 'calc', 2); R.row('Resistência', r, 'Ω', 'calc', 4);
+    how.forEach(x => R.step(x));
+    if (V > 60) R.alert('p', `${nf(V)} V: tensão perigosa ao toque (acima de 60 V CC).`);
+  },
+});
+defCalc({
+  id: 'hvsup', cat: 'ele', grp: 'Sistemas HV', name: 'Fonte HV e alimentação dos amplificadores', icon: 'bolt',
+  desc: 'Potência de entrada, corrente no barramento e capacidade de fonte necessária.',
+  fields: [
+    F('prms', 'Potência RMS total dos amplificadores', 'W', { need: 1, ph: 'ex.: 30000' }),
+    F('vbus', 'Tensão do barramento (alimentação)', 'V', { need: 1, ph: 'ex.: 14,4 ou 200' }),
+    F('eff', 'Eficiência dos amplificadores', '%', { def: 80, hint: 'Classe D: 75–90% (datasheet)' }),
+    F('reg', 'Regime de uso', '', { sel: REGIMES, def: '50' }),
+    F('isup', 'Corrente de cada fonte', 'A', { ph: 'opcional' }),
+    F('nsup', 'Quantidade de fontes', 'un.', { def: 1, step: 1 }),
+    F('margin', 'Folga de projeto', '%', { def: 25 }),
+  ],
+  run(v, R) {
+    const reg = +v.reg / 100, eff = v.eff / 100;
+    const pout = v.prms * reg, pin = pout / eff, I = pin / v.vbus, Ineed = I * (1 + v.margin / 100);
+    R.row('Potência de saída no regime', pout, 'W', 'est', 0, `P_saída = P_RMS × regime = ${nf(v.prms, 0)} × ${nf(reg * 100, 1)}% = ${nf(pout, 0)} W`);
+    R.row('Potência de entrada', pin, 'W', 'est', 0, `P_entrada = P_saída / η = ${nf(pout, 0)} / ${nf(eff, 2)} = ${nf(pin, 0)} W`);
+    R.row('Calor nos amplificadores', pin - pout, 'W', 'est', 0, `P_calor = P_entrada − P_saída = ${nf(pin - pout, 0)} W`);
+    R.row('Corrente no barramento', I, 'A', 'est', 1, `I = P_entrada / V = ${nf(pin, 0)} / ${nf(v.vbus)} = ${nf(I, 1)} A`);
+    R.row('Fonte necessária (com folga)', Ineed, 'A', 'calc', 0, `I_fonte = I × (1 + ${nf(v.margin)}%) = ${nf(Ineed, 0)} A`);
+    R.row('Pior caso (senoidal 100%)', v.prms / eff / v.vbus, 'A', 'est', 0, `I_máx = P_RMS / η / V = ${nf(v.prms / eff / v.vbus, 0)} A`);
+    if (v.isup) {
+      const cap = v.isup * (v.nsup || 1), use = I / cap * 100;
+      R.row('Capacidade das fontes', cap, 'A', 'calc', 0, `${nf(v.isup)} A × ${v.nsup || 1} = ${nf(cap)} A`);
+      R.row('Uso das fontes', use, '%', 'est', 0);
+      if (use > 100) R.alert('p', `Fontes insuficientes: o consumo estimado (${nf(I, 0)} A) passa a capacidade (${nf(cap, 0)} A). A tensão vai cair e os amplificadores podem desligar.`);
+      else if (use > 80) R.alert('a', `Fontes trabalhando a ${nf(use, 0)}% da capacidade. Pouca folga para picos.`);
+      else R.alert('ok', `Fontes com folga: ${nf(use, 0)}% da capacidade no regime escolhido.`);
+    }
+    if (v.vbus > 60) R.alert('p', `Barramento de ${nf(v.vbus)} V CC: risco de choque. Isole terminais, use chave geral e descarga dos capacitores antes de mexer.`);
+    R.ref('Regime: fração da potência RMS que a música exige em média. Música comum fica bem abaixo do senoidal; competição comprimida chega perto de 50%.');
+  },
+});
+defCalc({
+  id: 'vdrop', cat: 'ele', grp: 'Cabos e barramentos', name: 'Queda de tensão', icon: 'calc',
+  desc: 'Quanto de tensão se perde no cabo (ida e volta) e a potência que vira calor.',
+  fields: [
+    F('I', 'Corrente', 'A', { need: 1 }), F('L', 'Comprimento do cabo (só ida)', 'm', { need: 1 }),
+    F('A', 'Seção do cabo', 'mm²', { need: 1 }), F('V', 'Tensão do sistema', 'V', { need: 1 }),
+    F('mat', 'Material', '', { sel: Object.entries(MAT).map(([k, m]) => [k, m.n]), def: 'cu' }),
+    F('t', 'Temperatura do cabo', '°C', { def: 20 }),
+    F('ret', 'Retorno', '', { sel: [['2', 'Cabo negativo igual (ida e volta)'], ['1', 'Retorno pelo chassi (só ida)']], def: '2' }),
+  ],
+  run(v, R) {
+    const rho = rhoAt(v.mat, v.t), k = +v.ret, Rw = k * v.L * rho / v.A, dV = v.I * Rw, pct = dV / v.V * 100, Pl = v.I * v.I * Rw;
+    R.row('Resistência do cabo', Rw * 1000, 'mΩ', 'calc', 3, `R = ${k} × L × ρ / A = ${k} × ${nf(v.L)} × ${nf(rho, 5)} / ${nf(v.A)} = ${nf(Rw * 1000, 3)} mΩ`);
+    R.row('Queda de tensão', dV, 'V', 'calc', 3, `ΔV = I × R = ${nf(v.I)} × ${nf(Rw, 5)} = ${nf(dV, 3)} V`);
+    R.row('Queda percentual', pct, '%', 'calc', 2, `ΔV% = ΔV / V = ${nf(dV, 3)} / ${nf(v.V)} = ${nf(pct, 2)}%`);
+    R.row('Tensão na carga', v.V - dV, 'V', 'calc', 2);
+    R.row('Perda em calor no cabo', Pl, 'W', 'calc', 1, `P = I² × R = ${nf(Pl, 1)} W`);
+    R.ref(`ρ ${MAT[v.mat].n} a ${nf(v.t)} °C = ${nf(rho, 5)} Ω·mm²/m (ρ20 = ${MAT[v.mat].rho}, α = ${MAT[v.mat].a})`);
+    if (pct > 5) R.alert('p', `Queda de ${nf(pct, 1)}%: alta demais. Aumente a seção ou encurte o cabo.`);
+    else if (pct > 3) R.alert('a', `Queda de ${nf(pct, 1)}%: acima dos 3% recomendados.`);
+    else R.alert('ok', 'Queda dentro dos 3% recomendados.');
+    if (v.I / v.A > J_CABLE * 1.5) R.alert('p', `Densidade de corrente de ${nf(v.I / v.A, 1)} A/mm²: o cabo vai esquentar demais.`);
+  },
+});
+defCalc({
+  id: 'bus', cat: 'ele', grp: 'Cabos e barramentos', name: 'Barramento (busbar)', icon: 'calc',
+  desc: 'Seção, resistência, queda, perda e densidade de corrente de barras chatas.',
+  fields: [
+    F('w', 'Largura da barra', 'mm', { need: 1 }), F('e', 'Espessura da barra', 'mm', { need: 1 }), F('n', 'Barras em paralelo', 'un.', { def: 1, step: 1 }),
+    F('L', 'Comprimento', 'm', { need: 1 }), F('I', 'Corrente', 'A', { need: 1 }), F('V', 'Tensão do barramento', 'V', { ph: 'opcional' }),
+    F('mat', 'Material', '', { sel: [['cu', 'Cobre'], ['al', 'Alumínio']], def: 'cu' }), F('t', 'Temperatura', '°C', { def: 20 }),
+  ],
+  run(v, R) {
+    const A = v.w * v.e * (v.n || 1), rho = rhoAt(v.mat, v.t), Rb = v.L * rho / A, dV = v.I * Rb, J = v.I / A;
+    R.row('Seção total', A, 'mm²', 'calc', 1, `A = largura × espessura × n = ${nf(v.w)} × ${nf(v.e)} × ${v.n || 1} = ${nf(A, 1)} mm²`);
+    R.row('Resistência', Rb * 1000, 'mΩ', 'calc', 4, `R = L × ρ / A = ${nf(v.L)} × ${nf(rho, 5)} / ${nf(A, 1)} = ${nf(Rb * 1000, 4)} mΩ`);
+    R.row('Queda de tensão', dV, 'V', 'calc', 3, `ΔV = I × R = ${nf(dV, 3)} V`);
+    if (v.V) R.row('Queda percentual', dV / v.V * 100, '%', 'calc', 2);
+    R.row('Perda em calor', v.I * v.I * Rb, 'W', 'calc', 1, `P = I² × R`);
+    R.row('Densidade de corrente', J, 'A/mm²', 'calc', 2, `J = I / A = ${nf(v.I)} / ${nf(A, 1)} = ${nf(J, 2)} A/mm²`);
+    R.row('Seção recomendada', v.I / J_BUS, 'mm²', 'est', 0, `A_rec = I / ${J_BUS} A/mm²`);
+    R.ref(`Referência prática: até ~${J_BUS} A/mm² em cobre sem ventilação forçada para uso contínuo.`);
+    if (J > J_BUS * 1.5) R.alert('p', 'Barra subdimensionada: vai aquecer. Aumente largura/espessura ou use barras em paralelo.');
+    else if (J > J_BUS) R.alert('a', 'Acima da densidade de referência: aceitável só para picos curtos.');
+    else R.alert('ok', 'Barramento com seção adequada.');
+    if (v.V > 60) R.alert('p', 'Barramento acima de 60 V CC: proteja contra toque acidental (capa isolante).');
+  },
+});
+defCalc({
+  id: 'prech', cat: 'ele', grp: 'Sistemas HV', name: 'Pré-carga de capacitores', icon: 'calc',
+  desc: 'Tempo de carga, pico de corrente e potência do resistor de pré-carga.',
+  fields: [
+    F('C', 'Capacitância total do banco', 'F', { need: 1 }), F('V', 'Tensão de carga', 'V', { need: 1 }),
+    F('R', 'Resistor de pré-carga', 'Ω', { ph: 'ou preencha o tempo' }), F('t', 'Tempo desejado até ~99%', 's', { ph: 'opcional' }),
+    F('imax', 'Corrente máxima aceitável na ligação', 'A', { ph: 'opcional' }),
+  ],
+  run(v, R) {
+    let r = v.R;
+    if (!r && v.t) { r = v.t / (5 * v.C); R.row('Resistor calculado', r, 'Ω', 'calc', 3, `R = t / (5 × C) = ${nf(v.t)} / (5 × ${nf(v.C, 4)}) = ${nf(r, 3)} Ω`); }
+    if (!r) return R.need('Informe o resistor ou o tempo desejado.');
+    const tau = r * v.C, I0 = v.V / r, E = 0.5 * v.C * v.V * v.V;
+    R.row('Constante de tempo τ', tau, 's', 'calc', 3, `τ = R × C = ${nf(r, 3)} × ${nf(v.C, 4)} = ${nf(tau, 3)} s`);
+    R.row('Tempo até 99%', 4.6 * tau, 's', 'calc', 2, `t99 = 4,6 × τ = ${nf(4.6 * tau, 2)} s`);
+    R.row('Tempo até 99,3% (5τ)', 5 * tau, 's', 'calc', 2);
+    R.row('Pico de corrente na ligação', I0, 'A', 'calc', 2, `I0 = V / R = ${nf(v.V)} / ${nf(r, 3)} = ${nf(I0, 2)} A`);
+    R.row('Pico de potência no resistor', v.V * v.V / r, 'W', 'calc', 0, `P0 = V² / R = ${nf(v.V * v.V / r, 0)} W`);
+    R.row('Energia dissipada no resistor', E, 'J', 'calc', 1, `E = ½ × C × V² = ½ × ${nf(v.C, 4)} × ${nf(v.V)}² = ${nf(E, 1)} J`);
+    R.row('Potência média durante a carga', E / (5 * tau), 'W', 'calc', 1, `P_méd = E / 5τ = ${nf(E / (5 * tau), 1)} W`);
+    R.row('Resistor sugerido (potência)', Math.max(5, E / (5 * tau) * 2), 'W', 'est', 0);
+    R.ref('Use resistor de fio (wirewound) que aguente o pulso; confira a curva de sobrecarga do fabricante. Depois da pré-carga, um relé/contator faz o curto do resistor.');
+    if (v.imax && I0 > v.imax) R.alert('a', `Pico de ${nf(I0, 1)} A acima do limite de ${nf(v.imax)} A: aumente o resistor (mín. ${nf(v.V / v.imax, 2)} Ω).`);
+    if (v.V > 60) R.alert('p', 'Capacitores carregados guardam tensão perigosa mesmo desligados: instale resistor de descarga e meça antes de mexer.');
+    if (E > 500) R.alert('p', `Energia de ${nf(E, 0)} J: um curto nos terminais solta faísca e metal derretido. Nunca ligue sem pré-carga.`);
+  },
+});
+
+/* 1.3 ULTRACAPACITORES */
+defCalc({
+  id: 'ucap', cat: 'ele', grp: 'Ultracapacitores', name: 'Banco de ultracapacitores', icon: 'bolt',
+  desc: 'Capacitância, tensão, energia, ESR, descarga e balanceamento das células.',
+  presets: [['3 V 3000 F · 6 em série (≈18 V)', { vc: 3, cc: 3000, s: 6, p: 1 }], ['3 V 3000 F · 98 em série (≈294 V)', { vc: 3, cc: 3000, s: 98, p: 1 }]],
+  fields: [
+    F('vc', 'Tensão máxima por célula', 'V', { need: 1, ph: 'ex.: 3' }), F('cc', 'Capacitância por célula', 'F', { need: 1, ph: 'ex.: 3000' }),
+    F('esr', 'ESR por célula (datasheet)', 'mΩ', { ph: 'opcional' }), F('leak', 'Corrente de fuga por célula (datasheet)', 'mA', { ph: 'opcional' }),
+    F('s', 'Células em série', 'un.', { def: 1, step: 1 }), F('p', 'Fileiras em paralelo', 'un.', { def: 1, step: 1 }),
+    F('vsys', 'Tensão de trabalho do sistema', 'V', { ph: 'opcional' }), F('vmin', 'Tensão mínima de uso', 'V', { ph: 'opcional' }),
+    F('idis', 'Corrente de descarga', 'A', { ph: 'opcional' }),
+  ],
+  run(v, R) {
+    const s = v.s || 1, p = v.p || 1, Ceq = v.cc * p / s, Vmax = v.vc * s, Vw = v.vsys || Vmax;
+    R.row('Capacitância equivalente', Ceq, 'F', 'calc', 3, `C = C_célula × p / s = ${nf(v.cc)} × ${p} / ${s} = ${nf(Ceq, 3)} F`);
+    R.row('Tensão máxima do conjunto', Vmax, 'V', 'calc', 2, `V = V_célula × s = ${nf(v.vc)} × ${s} = ${nf(Vmax)} V`);
+    const E = 0.5 * Ceq * Vw * Vw;
+    R.row(`Energia a ${nf(Vw)} V`, E, 'J', 'calc', 0, `E = ½ × C × V² = ½ × ${nf(Ceq, 3)} × ${nf(Vw)}² = ${nf(E, 0)} J`);
+    R.row('Energia em Wh', E / 3600, 'Wh', 'calc', 2, `Wh = J / 3600`);
+    R.row('Total de células', s * p, 'un.', 'calc', 0);
+    if (v.vmin != null) {
+      const Eu = 0.5 * Ceq * (Vw * Vw - v.vmin * v.vmin);
+      R.row(`Energia útil (${nf(Vw)} → ${nf(v.vmin)} V)`, Eu, 'J', 'calc', 0, `E_útil = ½ × C × (V² − Vmin²) = ${nf(Eu, 0)} J (${nf(Eu / (0.5 * Ceq * Vw * Vw) * 100, 0)}% do total)`);
+      if (v.idis) { const t = Ceq * (Vw - v.vmin) / v.idis; R.row('Tempo de descarga (corrente constante)', t, 's', 'est', 2, `t = C × ΔV / I = ${nf(Ceq, 3)} × ${nf(Vw - v.vmin)} / ${nf(v.idis)} = ${nf(t, 2)} s`); }
+    }
+    if (v.esr) {
+      const esr = v.esr / 1000 * s / p;
+      R.row('ESR equivalente', esr * 1000, 'mΩ', 'calc', 3, `ESR = ESR_célula × s / p = ${nf(v.esr)} × ${s} / ${p} = ${nf(esr * 1000, 3)} mΩ`);
+      R.row('Potência máxima teórica', Vw * Vw / (4 * esr), 'W', 'est', 0, `P = V² / (4 × ESR) (carga casada, teórico)`);
+      if (v.idis) { R.row('Queda instantânea pela ESR', v.idis * esr, 'V', 'calc', 3, `ΔV = I × ESR = ${nf(v.idis)} × ${nf(esr, 5)} = ${nf(v.idis * esr, 3)} V`); R.row('Calor na ESR', v.idis * v.idis * esr, 'W', 'calc', 1, 'P = I² × ESR'); }
+    }
+    if (v.vsys) {
+      const vc = v.vsys / s;
+      R.row('Tensão por célula no sistema', vc, 'V', 'calc', 3, `V_célula = V_sistema / s = ${nf(v.vsys)} / ${s} = ${nf(vc, 3)} V`);
+      if (vc > v.vc) R.alert('p', `Sobretensão: ${nf(vc, 2)} V por célula passa o máximo de ${nf(v.vc)} V. As células podem estufar ou explodir. Aumente as células em série.`);
+      else if (vc > v.vc * 0.95) R.alert('a', `Células a ${nf(vc / v.vc * 100, 0)}% da tensão máxima: sem balanceamento, alguma vai passar do limite.`);
+    }
+    if (s > 1) {
+      if (v.leak) {
+        const ib = 10 * v.leak / 1000, rb = v.vc / ib, pb = v.vc * v.vc / rb;
+        R.row('Corrente de balanceamento (10× a fuga)', ib * 1000, 'mA', 'calc', 1);
+        R.row('Resistor de balanceamento por célula', rb, 'Ω', 'calc', 0, `R = V_célula / I_bal = ${nf(v.vc)} / ${nf(ib, 4)} = ${nf(rb, 0)} Ω`);
+        R.row('Potência de cada resistor', pb, 'W', 'calc', 3, `P = V² / R = ${nf(pb, 3)} W (use resistor de pelo menos ${nf(Math.max(pb * 2, 0.25), 2)} W)`);
+        R.row('Perda total no balanceamento', pb * s * p, 'W', 'calc', 2);
+      }
+      R.alert('a', `Com ${s} células em série é obrigatório balancear cada célula (placa de balanceamento ativo ou resistor por célula). Sem isso, as células se desequilibram e uma passa da tensão máxima.`);
+    }
+    if (Vmax > 60) R.alert('p', `Conjunto de até ${nf(Vmax)} V CC: tensão perigosa. Mantenha descarregado e isolado durante a montagem.`);
+    if (E > 2000) R.alert('p', `${nf(E, 0)} J armazenados: curto-circuito libera energia de forma violenta. Use fusível próximo ao banco e pré-carga.`);
+  },
+});
+
+/* 1.4 GERADORES E RETIFICADORES */
+defCalc({
+  id: 'gen', cat: 'ele', grp: 'Geradores e retificadores', name: 'Gerador: kVA, kW e corrente', icon: 'bolt',
+  desc: 'Conversão kVA ↔ kW, corrente de linha e capacidade de alimentar os amplificadores.',
+  fields: [
+    F('kva', 'Potência do gerador', 'kVA', { need: 1 }), F('fp', 'Fator de potência', '', { def: 0.8, hint: 'placa do gerador' }),
+    F('v', 'Tensão de saída', 'V', { need: 1, ph: 'ex.: 220' }), F('ph', 'Fases', '', { sel: [['1', 'Monofásico'], ['3', 'Trifásico']], def: '1' }),
+    F('use', 'Uso contínuo recomendado', '%', { def: 80 }),
+    F('dc', 'Demanda CC dos amplificadores', 'W', { ph: 'opcional (de Fonte HV)' }), F('eta', 'Eficiência retificador + fonte', '%', { def: 90 }),
+  ],
+  run(v, R) {
+    const kw = v.kva * v.fp, I = v.ph === '3' ? v.kva * 1000 / (Math.sqrt(3) * v.v) : v.kva * 1000 / v.v;
+    R.row('Potência ativa', kw, 'kW', 'calc', 2, `kW = kVA × FP = ${nf(v.kva)} × ${nf(v.fp)} = ${nf(kw, 2)} kW`);
+    R.row('Corrente nominal de linha', I, 'A', 'calc', 1, v.ph === '3' ? `I = S / (√3 × V) = ${nf(v.kva * 1000, 0)} / (1,732 × ${nf(v.v)}) = ${nf(I, 1)} A` : `I = S / V = ${nf(v.kva * 1000, 0)} / ${nf(v.v)} = ${nf(I, 1)} A`);
+    const cont = kw * v.use / 100;
+    R.row('Potência para uso contínuo', cont, 'kW', 'est', 2, `${nf(kw, 2)} × ${nf(v.use)}%`);
+    if (v.dc) {
+      const need = v.dc / (v.eta / 100) / 1000, pct = need / kw * 100;
+      R.row('Demanda no gerador', need, 'kW', 'est', 2, `P = P_CC / η = ${nf(v.dc, 0)} / ${nf(v.eta / 100, 2)} = ${nf(need * 1000, 0)} W`);
+      R.row('Uso do gerador', pct, '%', 'est', 0);
+      R.row('Gerador mínimo recomendado', need / v.fp / (v.use / 100), 'kVA', 'calc', 1, `kVA = kW / FP / uso = ${nf(need, 2)} / ${nf(v.fp)} / ${nf(v.use / 100, 2)}`);
+      if (pct > 100) R.alert('p', 'O gerador não aguenta a demanda estimada: a rotação cai e a tensão despenca.');
+      else if (pct > v.use) R.alert('a', `Gerador a ${nf(pct, 0)}%: acima dos ${nf(v.use)}% recomendados para uso contínuo.`);
+      else R.alert('ok', 'Gerador com folga para a demanda estimada.');
+    }
+    R.alert('p', 'Saída do gerador é tensão de rede: risco de morte. Aterramento, disjuntor e cabos isolados são obrigatórios.');
+  },
+});
+defCalc({
+  id: 'rect', cat: 'ele', grp: 'Geradores e retificadores', name: 'Ponte retificadora e dissipador', icon: 'calc',
+  desc: 'Tensão CC, corrente por diodo, PIV, dissipação térmica e dissipador necessário.',
+  fields: [
+    F('vac', 'Tensão CA de entrada (RMS)', 'V', { need: 1, hint: 'trifásico: tensão entre fases' }), F('ph', 'Tipo', '', { sel: [['1', 'Ponte monofásica (4 diodos)'], ['3', 'Ponte trifásica (6 diodos)']], def: '1' }),
+    F('idc', 'Corrente CC na saída', 'A', { need: 1 }), F('vf', 'Queda por diodo (datasheet)', 'V', { def: 1.1 }),
+    F('n', 'Pontes em paralelo', 'un.', { def: 1, step: 1 }),
+    F('rjc', 'Rθ junção–carcaça da ponte (datasheet)', '°C/W', { ph: 'opcional' }), F('rcs', 'Rθ carcaça–dissipador (pasta)', '°C/W', { def: 0.2 }),
+    F('tj', 'Temperatura máx. da junção', '°C', { def: 150 }), F('ta', 'Temperatura ambiente', '°C', { def: 50, hint: 'dentro do carro' }),
+  ],
+  run(v, R) {
+    const tri = v.ph === '3', n = v.n || 1, Vpk = Math.SQRT2 * v.vac - 2 * v.vf;
+    R.row('Tensão CC de pico (com capacitor)', Vpk, 'V', 'calc', 1, `V = √2 × V_CA − 2 × Vf = 1,414 × ${nf(v.vac)} − 2 × ${nf(v.vf)} = ${nf(Vpk, 1)} V`);
+    const Vavg = tri ? 1.35 * v.vac - 2 * v.vf : 0.9 * v.vac - 2 * v.vf;
+    R.row('Tensão CC média (sem capacitor)', Vavg, 'V', 'calc', 1, tri ? 'V = 1,35 × V_linha − 2 × Vf' : 'V = 0,9 × V_CA − 2 × Vf');
+    const Id = v.idc / n / (tri ? 3 : 2);
+    R.row('Corrente média por diodo', Id, 'A', 'calc', 1, `I_diodo = I_CC / pontes / ${tri ? 3 : 2} = ${nf(Id, 1)} A`);
+    R.row('Tensão reversa (PIV) por diodo', Math.SQRT2 * v.vac, 'V', 'calc', 0);
+    R.row('PIV recomendada (2× de folga)', 2 * Math.SQRT2 * v.vac, 'V', 'calc', 0);
+    R.row('Ponte recomendada (corrente)', v.idc / n * 1.5, 'A', 'calc', 0, 'I_ponte ≥ 1,5 × I_CC por ponte');
+    const P = 2 * v.vf * v.idc / n;
+    R.row('Calor em cada ponte', P, 'W', 'calc', 1, `P = 2 × Vf × I = 2 × ${nf(v.vf)} × ${nf(v.idc / n)} = ${nf(P, 1)} W (sempre 2 diodos conduzindo)`);
+    if (v.rjc != null) {
+      const rsa = (v.tj - v.ta) / P - v.rjc - v.rcs;
+      R.row('Dissipador necessário (Rθ máx.)', rsa, '°C/W', 'calc', 3, `Rθsa = (Tj − Ta) / P − Rθjc − Rθcs = (${nf(v.tj)} − ${nf(v.ta)}) / ${nf(P, 1)} − ${nf(v.rjc)} − ${nf(v.rcs)} = ${nf(rsa, 3)} °C/W`);
+      if (rsa <= 0) R.alert('p', 'Nem um dissipador perfeito resolve: divida a corrente em mais pontes ou use ponte de corrente maior.');
+      else if (rsa < 0.3) R.alert('a', 'Dissipador muito grande ou ventilação forçada necessária (cooler).');
+      else R.alert('ok', `Use dissipador com resistência térmica de até ${nf(rsa, 2)} °C/W.`);
+    }
+    if (Vpk > 60) R.alert('p', `Saída de ${nf(Vpk, 0)} V CC: perigosa. Isole os terminais e use fusível na saída.`);
+  },
+});
+
+/* 1.5 CABOS */
+defCalc({
+  id: 'cable', cat: 'ele', grp: 'Cabos e barramentos', name: 'Bitola do cabo + fusível', icon: 'calc',
+  desc: 'Seção mínima pela queda e pela corrente, bitola comercial, AWG, cabos em paralelo e fusível.',
+  fields: [
+    F('I', 'Corrente', 'A', { need: 1 }), F('L', 'Comprimento (só ida)', 'm', { need: 1 }), F('V', 'Tensão do sistema', 'V', { need: 1 }),
+    F('dmax', 'Queda máxima aceita', '%', { def: 3 }), F('mat', 'Material', '', { sel: Object.entries(MAT).map(([k, m]) => [k, m.n]), def: 'cu' }),
+    F('t', 'Temperatura do cabo', '°C', { def: 40 }), F('n', 'Cabos em paralelo', 'un.', { def: 1, step: 1 }),
+  ],
+  run(v, R) {
+    const rho = rhoAt(v.mat, v.t), n = v.n || 1, dVmax = v.V * v.dmax / 100;
+    const Adrop = 2 * v.L * rho * v.I / dVmax, Aamp = v.I / J_CABLE * (v.mat === 'cu' ? 1 : 1.6), Amin = Math.max(Adrop, Aamp);
+    R.row('Seção mínima pela queda', Adrop, 'mm²', 'calc', 1, `A = 2 × L × ρ × I / ΔVmáx = 2 × ${nf(v.L)} × ${nf(rho, 5)} × ${nf(v.I)} / ${nf(dVmax, 3)} = ${nf(Adrop, 1)} mm²`);
+    R.row('Seção mínima pela corrente', Aamp, 'mm²', 'est', 1, `A = I / ${J_CABLE} A/mm²${v.mat === 'cu' ? '' : ' × 1,6 (alumínio/CCA)'} = ${nf(Aamp, 1)} mm²`);
+    R.row('Seção total necessária', Amin, 'mm²', 'calc', 1);
+    const each = Amin / n, com = nextUp(SEC_MM2, each);
+    R.row(n > 1 ? `Seção de cada um dos ${n} cabos` : 'Seção mínima do cabo', each, 'mm²', 'calc', 1);
+    if (com) {
+      R.row('Bitola comercial recomendada', com, 'mm²', 'calc', 0);
+      R.row('Equivalente AWG', mm2awg(com), 'AWG', 'ref', 1, `AWG ≈ 36 − 39 × log₉₂(d / 0,127), d = √(4A/π)`);
+      const At = com * n, dV = 2 * v.L * rho * v.I / At;
+      R.row('Queda real com essa bitola', dV / v.V * 100, '%', 'calc', 2, `ΔV = ${nf(dV, 3)} V`);
+      const amp = At * J_CABLE / (v.mat === 'cu' ? 1 : 1.6), fz = nextUp(FUSES, v.I * 1.25);
+      R.row('Fusível recomendado', fz, 'A', 'calc', 0, `Fusível ≥ 1,25 × I = ${nf(v.I * 1.25, 0)} A → próximo comercial ${fz} A`);
+      R.row('Capacidade do cabo (referência)', amp, 'A', 'est', 0);
+      if (fz > amp) R.alert('a', `O fusível de ${fz} A passa a capacidade do cabo (~${nf(amp, 0)} A): suba uma bitola para o fusível proteger o cabo.`);
+    } else R.alert('p', 'Seção acima de 300 mm²: divida em cabos em paralelo ou use barramento.');
+    R.alert('d', 'O cabo negativo deve ter a mesma seção do positivo. Fusível a no máximo 30 cm da bateria/banco.');
+    if (n > 1) R.alert('d', 'Cabos em paralelo: mesmo comprimento, mesma bitola e terminais iguais nas duas pontas.');
+    R.ref(`Referência de corrente: ~${J_CABLE} A/mm² para cobre flexível em uso contínuo (picos curtos admitem mais).`);
+  },
+});
+defCalc({
+  id: 'awg', cat: 'ele', grp: 'Cabos e barramentos', name: 'Conversor AWG ↔ mm²', icon: 'calc',
+  desc: 'Converte bitolas e mostra resistência por metro e o comprimento máximo para uma queda.',
+  fields: [
+    F('awg', 'AWG', '', { sel: AWG_LIST.map(n => [String(n), awgLabel(n) + ' AWG']), def: '0' }),
+    F('mm2', 'ou seção', 'mm²', { ph: 'opcional' }),
+    F('I', 'Corrente (p/ comprimento máx.)', 'A', { ph: 'opcional' }), F('V', 'Tensão do sistema', 'V', { ph: 'opcional' }), F('dmax', 'Queda máxima', '%', { def: 3 }),
+  ],
+  run(v, R) {
+    const A = v.mm2 || awgArea(+v.awg);
+    if (v.mm2) R.row('Equivalente AWG', mm2awg(v.mm2), 'AWG', 'calc', 1); else R.row(`${awgLabel(+v.awg)} AWG em mm²`, A, 'mm²', 'calc', 2, `d = 0,127 × 92^((36 − n) / 39) mm; A = π d² / 4`);
+    R.row('Diâmetro do condutor', Math.sqrt(4 * A / Math.PI), 'mm', 'calc', 2);
+    R.row('Resistência (cobre, 20 °C)', MAT.cu.rho / A * 1000, 'mΩ/m', 'calc', 4, 'R = ρ / A');
+    if (v.I && v.V) { const L = (v.V * v.dmax / 100) * A / (2 * MAT.cu.rho * v.I); R.row('Comprimento máximo (ida)', L, 'm', 'calc', 2, `L = ΔV × A / (2 × ρ × I) = ${nf(L, 2)} m`); }
+    R.alert('d', 'Muitos cabos vendidos como "0 AWG" têm seção real menor. Confira a seção em mm² impressa no cabo.');
+    R.table('Tabela AWG', ['AWG', 'mm²', 'mΩ/m (cobre)'], AWG_LIST.map(n => [awgLabel(n), nf(awgArea(n), 1), nf(MAT.cu.rho / awgArea(n) * 1000, 3)]));
+  },
+});
+
+/* 1.6 AMPLIFICADORES */
+defCalc({
+  id: 'amp', cat: 'ele', grp: 'Amplificadores', name: 'Amplificador + alto-falantes', icon: 'calc',
+  desc: 'Impedância final, potência por falante, consumo, corrente e compatibilidade.',
+  fields: [
+    F('prms', 'Potência RMS do amplificador', 'W', { need: 1 }), F('zr', 'na impedância de', 'Ω', { need: 1 }),
+    F('zmin', 'Impedância mínima do amplificador', 'Ω', { ph: 'datasheet' }),
+    F('nq', 'Quantidade de alto-falantes', 'un.', { need: 1, step: 1 }), F('zs', 'Impedância de cada falante', 'Ω', { need: 1 }),
+    F('lig', 'Ligação', '', { sel: [['par', 'Todos em paralelo'], ['ser', 'Todos em série'], ['sp', 'Série-paralelo']], def: 'par' }),
+    F('sp', 'Falantes em série por grupo (série-paralelo)', 'un.', { def: 2, step: 1 }),
+    F('prs', 'Potência RMS de cada falante', 'W', { ph: 'opcional' }),
+    F('vsup', 'Tensão de alimentação', 'V', { ph: 'opcional' }), F('eff', 'Eficiência', '%', { def: 80 }), F('reg', 'Regime', '', { sel: REGIMES, def: '50' }),
+    F('vout', 'Tensão de saída medida (multímetro, CA)', 'V', { ph: 'opcional' }),
+    F('v1', 'Tensão em que a potência foi medida', 'V', { ph: 'opcional' }), F('v2', 'Nova tensão de alimentação', 'V', { ph: 'opcional' }),
+  ],
+  run(v, R) {
+    const n = Math.max(1, v.nq | 0); let Z, how;
+    if (v.lig === 'ser') { Z = v.zs * n; how = `Z = Z_falante × n = ${nf(v.zs)} × ${n}`; }
+    else if (v.lig === 'sp') { const s = Math.max(1, v.sp | 0), g = Math.floor(n / s); Z = v.zs * s / Math.max(1, g); how = `Z = Z × série / grupos = ${nf(v.zs)} × ${s} / ${g}`; if (g * s !== n) R.alert('a', `${n} falantes não fecham grupos iguais de ${s} em série.`); }
+    else { Z = v.zs / n; how = `Z = Z_falante / n = ${nf(v.zs)} / ${n}`; }
+    R.row('Impedância final', Z, 'Ω', 'calc', 3, how + ` = ${nf(Z, 3)} Ω`);
+    const Pz = v.prms * v.zr / Z;
+    R.row('Potência na impedância final', Math.min(Pz, v.prms * 4), 'W', 'est', 0, `P ≈ P_RMS × Z_nominal / Z_final = ${nf(v.prms, 0)} × ${nf(v.zr)} / ${nf(Z, 3)} (amplificador limitado por tensão)`);
+    const per = Pz / n;
+    R.row('Potência por falante', per, 'W', 'est', 0, `${nf(Pz, 0)} / ${n}`);
+    if (v.prs) {
+      const ratio = per / v.prs;
+      R.row('Relação amplificador / falante', ratio * 100, '%', 'est', 0);
+      if (ratio > 1.5) R.alert('p', `Cada falante recebe ~${nf(per, 0)} W para ${nf(v.prs, 0)} W RMS: risco de queimar bobina. Use limitador.`);
+      else if (ratio > 1.1) R.alert('a', 'Amplificador acima da potência dos falantes: regule o ganho e o limitador com cuidado.');
+      else if (ratio < 0.5) R.alert('d', 'Falantes subaproveitados: sobra potência nos falantes.');
+      else R.alert('ok', 'Potência compatível entre amplificador e falantes.');
+    }
+    if (v.zmin) { if (Z < v.zmin - 1e-6) R.alert('p', `Impedância final de ${nf(Z, 2)} Ω abaixo do mínimo do amplificador (${nf(v.zmin)} Ω): ele esquenta, entra em proteção ou queima.`); else R.alert('ok', `Impedância de ${nf(Z, 2)} Ω dentro do mínimo do amplificador (${nf(v.zmin)} Ω).`); }
+    if (v.vout) { const pm = v.vout * v.vout / Z; R.row('Potência aplicada (medida)', pm, 'W', 'med', 0, `P = V² / Z = ${nf(v.vout)}² / ${nf(Z, 3)} = ${nf(pm, 0)} W`); }
+    if (v.vsup) {
+      const pin = v.prms * (+v.reg / 100) / (v.eff / 100), I = pin / v.vsup;
+      R.row('Consumo estimado', pin, 'W', 'est', 0, `P = P_RMS × regime / η = ${nf(v.prms, 0)} × ${nf(+v.reg)}% / ${nf(v.eff / 100, 2)}`);
+      R.row('Corrente exigida', I, 'A', 'est', 1, `I = P / V = ${nf(pin, 0)} / ${nf(v.vsup)}`);
+      R.row('Corrente no pior caso (100%)', v.prms / (v.eff / 100) / v.vsup, 'A', 'est', 0);
+    }
+    if (v.v1 && v.v2) { const p2 = v.prms * Math.pow(v.v2 / v.v1, 2); R.row(`Potência estimada em ${nf(v.v2)} V`, p2, 'W', 'est', 0, `P2 = P1 × (V2 / V1)² = ${nf(v.prms, 0)} × (${nf(v.v2)} / ${nf(v.v1)})²`); R.ref('Vale para amplificador com fonte não regulada. Com fonte regulada a potência quase não muda com a tensão.'); }
+    if (v.prms && v.vsup && v.eff) R.row('Eficiência informada', v.eff, '%', 'ref', 0);
+  },
+});
+
+/* 2.1 ALINHAMENTO (cálculos) */
+defCalc({
+  id: 'phase', cat: 'aud', grp: 'Alinhamento', name: 'Fase entre vias', icon: 'wave',
+  desc: 'Diferença de fase entre dois falantes numa frequência, a partir da diferença de distância.',
+  fields: [F('f', 'Frequência (ex.: corte)', 'Hz', { need: 1 }), F('dd', 'Diferença de distância até você', 'cm', { need: 1 }), F('t', 'Temperatura do ar', '°C', { def: 25 })],
+  run(v, R) {
+    const c = 331.3 + 0.606 * v.t, dt = v.dd / 100 / c, ph = (360 * v.f * dt) % 360, w = ph > 180 ? ph - 360 : ph;
+    R.row('Velocidade do som', c, 'm/s', 'calc', 1, `c = 331,3 + 0,606 × T = ${nf(c, 1)} m/s`);
+    R.row('Diferença de tempo', dt * 1000, 'ms', 'calc', 3, `Δt = Δd / c = ${nf(v.dd / 100, 3)} / ${nf(c, 1)} = ${nf(dt * 1000, 3)} ms`);
+    R.row('Diferença de fase', w, '°', 'calc', 0, `φ = 360 × f × Δt = 360 × ${nf(v.f)} × ${nf(dt, 6)} = ${nf(360 * v.f * dt, 1)}° → ${nf(w, 0)}°`);
+    R.row('Delay para alinhar', dt * 1000, 'ms', 'calc', 3);
+    const a = Math.abs(w);
+    if (a > 135) R.alert('p', 'Quase oposição de fase: as vias se cancelam no corte. Aplique o delay ou inverta a polaridade de uma via e compare.');
+    else if (a > 60) R.alert('a', 'Defasagem considerável: o corte perde volume. Aplique o delay indicado.');
+    else R.alert('ok', 'Vias praticamente em fase nessa frequência.');
+  },
+});
+defCalc({
+  id: 'xover', cat: 'aud', grp: 'Alinhamento', name: 'Frequência de corte / crossover passivo', icon: 'wave',
+  desc: 'Componentes (bobina e capacitor) para crossover passivo de 1ª e 2ª ordem.',
+  fields: [F('f', 'Frequência de corte', 'Hz', { need: 1 }), F('z', 'Impedância do falante', 'Ω', { need: 1 }),
+    F('ord', 'Tipo de filtro', '', { sel: [['1', '1ª ordem (6 dB/oit.)'], ['bw', '2ª ordem Butterworth (12 dB/oit.)'], ['lr', '2ª ordem Linkwitz-Riley (12 dB/oit.)']], def: 'lr' })],
+  run(v, R) {
+    const w = 2 * Math.PI * v.f; let L, C, how;
+    if (v.ord === '1') { L = v.z / w; C = 1 / (w * v.z); how = ['L = Z / (2πf)', 'C = 1 / (2πf Z)']; }
+    else if (v.ord === 'bw') { L = v.z * Math.SQRT2 / w; C = 1 / (w * v.z * Math.SQRT2); how = ['L = √2 × Z / (2πf)', 'C = 1 / (2πf × Z × √2)']; }
+    else { L = 2 * v.z / w; C = 1 / (2 * w * v.z); how = ['L = Z / (πf)', 'C = 1 / (4πf Z)']; }
+    R.row('Bobina (indutor)', L * 1000, 'mH', 'calc', 3, how[0] + ` = ${nf(L * 1000, 3)} mH`);
+    R.row('Capacitor', C * 1e6, 'µF', 'calc', 2, how[1] + ` = ${nf(C * 1e6, 2)} µF`);
+    R.ref('Passa-altas: capacitor em série (e bobina em paralelo na 2ª ordem). Passa-baixas: bobina em série (e capacitor em paralelo). Use a impedância real do falante na frequência de corte.');
+    R.alert('d', 'No processador STX o corte é ativo (sem componentes). Use estes valores só em divisor passivo.');
+  },
+});
+
+/* 2.3 PROTEÇÃO */
+defCalc({
+  id: 'limit', cat: 'aud', grp: 'Proteção de áudio', name: 'Limitador e proteção', icon: 'shield',
+  desc: 'Tensão máxima, potência aplicada e recomendações de corte e limitador por tipo de falante.',
+  fields: [
+    F('type', 'Tipo de falante', '', { sel: [['tw', 'Tweeter / super tweeter'], ['dr', 'Driver de compressão'], ['md', 'Médio / médio-grave'], ['wf', 'Woofer / grave'], ['sb', 'Subwoofer']], def: 'dr' }),
+    F('p', 'Potência RMS do falante (AES)', 'W', { need: 1 }), F('z', 'Impedância', 'Ω', { need: 1 }),
+    F('safe', 'Margem de segurança', '%', { ph: 'padrão por tipo' }),
+    F('fmin', 'Frequência mínima recomendada (fabricante)', 'Hz', { ph: 'opcional' }), F('fs', 'Frequência de ressonância Fs', 'Hz', { ph: 'opcional' }),
+    F('vmed', 'Tensão medida na saída do amplificador', 'V', { ph: 'opcional' }),
+  ],
+  run(v, R) {
+    const T = { tw: [50, 'Corte ≥ 2× a mínima do fabricante, 24 dB/oit.'], dr: [60, 'Corte ≥ 1,5–2× a mínima do fabricante, 24 dB/oit. ou mais'], md: [70, 'Passa-altas acima da Fs, 24 dB/oit.'], wf: [80, 'Subsônico perto de 0,7 × Fs'], sb: [80, 'Subsônico perto de 0,7 × Fs, 24 dB/oit.'] }[v.type];
+    const safe = (v.safe || T[0]) / 100, Vmax = Math.sqrt(v.p * v.z), Vlim = Math.sqrt(v.p * safe * v.z);
+    R.row('Tensão máxima RMS (100%)', Vmax, 'V', 'calc', 2, `V = √(P × Z) = √(${nf(v.p)} × ${nf(v.z)}) = ${nf(Vmax, 2)} V`);
+    R.row(`Limite sugerido (${nf(safe * 100, 0)}%)`, Vlim, 'V', 'calc', 2, `V_lim = √(P × ${nf(safe, 2)} × Z) = ${nf(Vlim, 2)} V`);
+    R.row('Limite em dBV', 20 * Math.log10(Vlim), 'dBV', 'calc', 1, `dBV = 20 × log10(V) = ${nf(20 * Math.log10(Vlim), 1)}`);
+    R.row('Potência no limite', v.p * safe, 'W', 'calc', 0);
+    if (v.vmed) { const pm = v.vmed * v.vmed / v.z; R.row('Potência aplicada (medida)', pm, 'W', 'med', 0, `P = V² / Z = ${nf(v.vmed)}² / ${nf(v.z)} = ${nf(pm, 0)} W`); if (pm > v.p) R.alert('p', `Aplicando ${nf(pm, 0)} W num falante de ${nf(v.p, 0)} W: reduza o ganho/limitador agora.`); else if (pm > v.p * safe) R.alert('a', 'Acima da margem de segurança sugerida.'); else R.alert('ok', 'Potência aplicada dentro da margem.'); }
+    if (v.fmin && ['tw', 'dr'].includes(v.type)) R.row('Corte passa-altas recomendado', v.fmin * (v.type === 'tw' ? 2 : 1.6), 'Hz', 'est', 0);
+    if (v.fs && ['wf', 'sb', 'md'].includes(v.type)) R.row(v.type === 'md' ? 'Passa-altas mínimo' : 'Subsônico sugerido', v.fs * (v.type === 'md' ? 1.2 : 0.7), 'Hz', 'est', 0);
+    R.alert('d', T[1]);
+    R.ref('Meça a tensão com tom senoidal (ex.: 1 kHz para driver, 50 Hz para grave) no volume máximo usado, multímetro em CA, falante desligado ou com carga resistiva. Faça com cuidado e volume subindo aos poucos.');
+  },
+});
+
+/* ---------- motor de resultado ---------- */
+class CalcResult {
+  constructor() { this.rows = []; this.steps = []; this.alerts = []; this.refs = []; this.tables = []; this.missing = null; }
+  row(l, v, u, k = 'calc', d = 2, step) { this.rows.push({ l, v, u, k, d }); if (step) this.steps.push(step); }
+  step(s) { this.steps.push(s); }
+  alert(lv, t) { this.alerts.push({ lv, t }); }
+  ref(t) { this.refs.push(t); }
+  table(title, head, rows) { this.tables.push({ title, head, rows }); }
+  need(t) { this.missing = t; }
+}
+const KIND = { calc: ['CALCULADO', 'k-calc'], est: ['ESTIMADO', 'k-est'], med: ['MEDIDO', 'k-med'], ref: ['REFERÊNCIA', 'k-ref'] };
+const LVN = { p: 'PERIGO', a: 'ATENÇÃO', d: 'DICA', ok: 'OK' };
+
+const Pro = {
+  hist() { return Store.get('proHist', []); },
+  addHist(e) { const l = this.hist(); l.unshift(e); Store.set('proHist', l.slice(0, 120)); },
+  inputs(id) { return Store.get('proIn:' + id, {}); },
+  setInputs(id, v) { Store.set('proIn:' + id, v); },
+  parse(c, raw) {
+    const v = {}, miss = [];
+    for (const f of c.fields) {
+      let x = raw[f.k];
+      if (f.sel) { v[f.k] = x != null && x !== '' ? x : String(f.def); continue; }
+      if (x == null || x === '') x = f.def != null ? String(f.def) : '';
+      const n = parseFloat(String(x).replace(/\./g, (m, i, s) => s.includes(',') ? '' : '.').replace(',', '.'));
+      if (x === '' || !isFinite(n)) { v[f.k] = null; if (f.need) miss.push(f.l); } else v[f.k] = n;
+    }
+    for (const k of Object.keys(v)) if (v[k] != null && typeof v[k] === 'number' && v[k] < 0 && !['t', 'dd'].includes(k)) miss.push('valor negativo');
+    return { v, miss };
+  },
+  compute(c, raw) {
+    const { v, miss } = this.parse(c, raw), R = new CalcResult();
+    if (miss.length) { R.need('Preencha: ' + [...new Set(miss)].join(', ') + '.'); return R; }
+    try { c.run(v, R); } catch (e) { console.error(e); R.need('Não consegui calcular com esses valores.'); }
+    return R;
+  },
+  report(c, raw, R) {
+    const L = [`${CONFIG.APP} · Plano Diamante`, `${c.name} — ${new Date().toLocaleString('pt-BR')}`, '', 'DADOS INFORMADOS'];
+    c.fields.forEach(f => { const x = raw[f.k]; if (x != null && x !== '') L.push(`• ${f.l}: ${f.sel ? (f.sel.find(o => o[0] === x) || [, x])[1] : x} ${f.u || ''}`.trim()); });
+    L.push('', 'RESULTADOS'); R.rows.forEach(r => L.push(`• ${r.l}: ${nf(r.v, r.d)} ${r.u} [${KIND[r.k][0]}]`));
+    if (R.alerts.length) { L.push('', 'ALERTAS'); R.alerts.forEach(a => L.push(`• ${LVN[a.lv]}: ${a.t}`)); }
+    if (R.steps.length) { L.push('', 'MEMÓRIA DE CÁLCULO'); R.steps.forEach(s => L.push('• ' + s)); }
+    if (R.refs.length) { L.push('', 'REFERÊNCIAS'); R.refs.forEach(s => L.push('• ' + s)); }
+    L.push('', 'Valores ESTIMADOS dependem de condições reais; confirme com medição.', `Gerado no ${CONFIG.APP} por ${CONFIG.BRAND}`);
+    return L.join('\n');
+  },
+  async share(title, text) {
+    try { if (navigator.share) { await navigator.share({ title, text }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+    UI.copy(text, 'Relatório copiado. Cole no WhatsApp ou onde quiser.');
+  },
+};
+
+/* ---------- telas ---------- */
+const PRO_FEATURES = [
+  ['Engenharia elétrica', 'bolt', ['Banco de baterias: série/paralelo, Ah, Wh, autonomia com Peukert', 'Fonte HV, barramento, pré-carga de capacitores', 'Ultracapacitores: energia, ESR, balanceamento (simulação 3 V 3000 F)', 'Gerador kVA/kW, ponte retificadora e dissipador', 'Bitola de cabos, AWG, queda de tensão, barramentos e fusíveis', 'Amplificadores: impedância, potência, consumo e compatibilidade']],
+  ['Meu Projeto de Som', 'gem', ['Cadastre amplificadores, falantes, baterias, fontes, gerador, cabos…', 'Potência total, consumo, corrente e alimentação necessária', 'Encontra incompatibilidades e dá o diagnóstico']],
+  ['Alinhamento e medição', 'wave', ['Delay por distância, fase, polaridade, crossover e sobreposição', 'Gerador de tom 20 Hz–20 kHz, ruído rosa e varredura', 'Medição com microfone, picos, cancelamentos e comparação', 'Calculadora de limitador e proteção de drivers e graves']],
+  ['Consultor com IA', 'spark', ['Analisa o projeto completo e as medições', 'Aponta riscos elétricos e sugere bitolas, proteções e alimentação', 'Responde dúvidas técnicas e leva à ferramenta certa']],
+];
+
+Object.assign(UI, {
+  diamondCard(big) {
+    const has = License.premium();
+    return h('div', { class: 'diamond' + (big ? ' big' : '') },
+      h('div', { class: 'dia-head' }, h('div', { class: 'dia-gem' }, ic('gem')),
+        h('div', {}, h('small', {}, 'VERSÃO PREMIUM'), h('h2', {}, 'Plano Diamante'), h('p', {}, 'Central de engenharia elétrica e análise de áudio para som automotivo e paredão, com consultor de IA.')),
+        h('div', { class: 'dia-price' }, h('b', { class: 'num' }, CONFIG.PREMIUM.price), h('small', {}, 'pagamento único'))),
+      h('div', { class: 'dia-grid' }, PRO_FEATURES.map(([t, icn, items]) => h('div', { class: 'dia-col' }, h('h4', {}, ic(icn), t), h('ul', {}, items.map(x => h('li', {}, x)))))),
+      h('div', { class: 'dia-foot' },
+        h('p', {}, 'Comprado por fora dos planos: quem já aluga continua pagando só o plano normal. Não faz parte do teste grátis.'),
+        has ? h('span', { class: 'status-tag ok' }, ic('check'), 'Liberado neste aparelho') :
+          h('a', { class: 'btn primary', href: License.waPremium(), target: '_blank', rel: 'noopener' }, ic('chat'), 'Quero o Diamante')));
+  },
+  vPro() {
+    if (!License.premium()) {
+      this.main.append(h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Diamante'), h('p', {}, 'Ferramentas profissionais para projetar e regular som de alta potência.'))),
+        this.diamondCard(true),
+        h('div', { class: 'panel', style: { marginTop: '16px' } }, h('h3', {}, 'Já comprou?'), h('p', { style: { color: 'var(--muted)', margin: '0 0 6px' } }, 'Cole a chave do Diamante abaixo. O código deste aparelho é ' + Device.id + '.'), this.activateBox()));
+      return;
+    }
+    if (!License.premiumUsable()) {
+      this.main.append(h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Diamante'))),
+        this.emptyBox('Diamante pausado', 'O Diamante é seu para sempre, mas funciona junto com o app liberado (teste ou plano em dia). Renove o plano para voltar a usar.', h('button', { class: 'btn primary', onclick: () => this.switchTab('lic') }, ic('key'), 'Ver planos')));
+      return;
+    }
+    const card = (id, n, d, icn, go) => h('button', { class: 'tool-card', onclick: go || (() => this.go({ v: 'tool', id })) }, h('span', { class: 'tc-ic' }, ic(icn)), h('b', {}, n), h('small', {}, d));
+    const ele = Object.values(CALCS).filter(c => c.cat === 'ele'), aud = Object.values(CALCS).filter(c => c.cat === 'aud');
+    const grp = list => { const m = new Map(); list.forEach(c => { if (!m.has(c.grp)) m.set(c.grp, []); m.get(c.grp).push(c); }); return [...m]; };
+    this.main.append(
+      h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, '💎 Diamante'), h('p', {}, 'Engenharia elétrica, alinhamento, medição e consultor técnico. Funciona sem internet.')),
+        h('div', { style: { display: 'flex', gap: '10px', flexWrap: 'wrap' } }, h('button', { class: 'btn', onclick: () => this.go({ v: 'tool', id: '_hist' }) }, ic('hist'), 'Histórico'))),
+      h('div', { class: 'pro-hero' },
+        h('button', { class: 'pro-big', onclick: () => this.go({ v: 'proj' }) }, h('span', { class: 'tc-ic' }, ic('gem')), h('div', {}, h('b', {}, 'MEU PROJETO DE SOM'), h('small', {}, 'Cadastre o sistema inteiro e receba potência, consumo, alimentação, bitolas e diagnóstico.'))),
+        h('button', { class: 'pro-big ai', onclick: () => this.go({ v: 'tool', id: '_ai' }) }, h('span', { class: 'tc-ic' }, ic('spark')), h('div', {}, h('b', {}, 'CONSULTOR COM IA'), h('small', {}, 'Analisa seu projeto, medições e regulagem e responde dúvidas técnicas.')))),
+      h('div', { class: 'section-title' }, h('h2', {}, 'Engenharia elétrica'), h('small', {}, '70% do Diamante')),
+      ...grp(ele).map(([g, cs]) => h('div', { class: 'tool-grp' }, h('h3', {}, g), h('div', { class: 'tool-grid' }, cs.map(c => card(c.id, c.name, c.desc, c.icon))))),
+      h('div', { class: 'section-title' }, h('h2', {}, 'Alinhamento e análise de áudio'), h('small', {}, '30% do Diamante')),
+      h('div', { class: 'tool-grp' }, h('h3', {}, 'Medição'), h('div', { class: 'tool-grid' },
+        card('_siggen', 'Gerador de sinais', 'Tom 20 Hz–20 kHz, ruído rosa e varredura.', 'vol'),
+        card('_meas', 'Medição com microfone', 'RTA, resposta, picos, cancelamentos e comparação.', 'mic'),
+        card('_pol', 'Polaridade e fase com microfone', 'Compara normal × invertido no corte entre vias.', 'mic'))),
+      h('div', { class: 'tool-grp' }, h('h3', {}, 'Alinhamento'), h('div', { class: 'tool-grid' },
+        card('_delay', 'Delay por distância', 'Mede com a trena e envia os delays ao processador.', 'wave'),
+        card('_overlap', 'Crossover e sobreposição', 'Lê os cortes das saídas e mostra buracos e sobreposições.', 'wave'),
+        ...aud.filter(c => c.grp === 'Alinhamento').map(c => card(c.id, c.name, c.desc, c.icon)),
+        card('_eq', 'Equalização assistida', 'Mede pelo microfone e corrige o EQ gráfico (aba Ajustes IA).', 'spark', () => this.switchTab('ia')))),
+      h('div', { class: 'tool-grp' }, h('h3', {}, 'Proteção de áudio'), h('div', { class: 'tool-grid' }, aud.filter(c => c.grp === 'Proteção de áudio').map(c => card(c.id, c.name, c.desc, c.icon)))));
+  },
+  vTool(cv) {
+    const special = { _hist: 'tHist', _ai: 'tAi', _siggen: 'tSig', _meas: 'tMeas', _pol: 'tPol', _delay: 'tDelay', _overlap: 'tOverlap' }[cv.id];
+    if (!License.premiumUsable()) { this.main.append(this.emptyBox('Ferramenta do Diamante', 'Libere o Plano Diamante para usar.', h('button', { class: 'btn primary', onclick: () => this.switchTab('pro') }, ic('gem'), 'Ver Diamante'))); return; }
+    if (special) return this[special](cv);
+    const c = CALCS[cv.id]; if (!c) return this.main.append(this.emptyBox('Ferramenta não encontrada', ''));
+    const raw = { ...Pro.inputs(c.id) };
+    const out = h('div', { class: 'calc-out' });
+    const paint = () => {
+      const R = Pro.compute(c, raw); out.replaceChildren();
+      if (R.missing) { out.append(h('div', { class: 'calc-miss' }, ic('info'), R.missing)); return; }
+      out.append(
+        h('div', { class: 'calc-rows' }, R.rows.map(r => h('div', { class: 'crow' }, h('span', {}, r.l), h('b', { class: 'num' }, nf(r.v, r.d), h('small', {}, ' ' + r.u)), h('i', { class: 'ktag ' + KIND[r.k][1] }, KIND[r.k][0])))),
+        R.alerts.length ? h('div', { class: 'calc-alerts' }, R.alerts.map(a => h('div', { class: 'tip' }, h('span', { class: 'lv ' + a.lv }, LVN[a.lv]), h('div', {}, h('small', { style: { color: 'var(--ink)', fontSize: '13.5px' } }, a.t))))) : null,
+        R.tables.map(t => h('details', { class: 'calc-mem' }, h('summary', {}, t.title), h('table', { class: 'ctable' }, h('tr', {}, t.head.map(x => h('th', {}, x))), t.rows.map(r => h('tr', {}, r.map(x => h('td', {}, x))))))),
+        R.steps.length ? h('details', { class: 'calc-mem', open: Store.get('memOpen', false) || null, ontoggle: e => Store.set('memOpen', e.target.open) }, h('summary', {}, 'Memória de cálculo (fórmulas)'), h('ol', {}, R.steps.map(s => h('li', { class: 'num' }, s)))) : null,
+        R.refs.length ? h('div', { class: 'calc-ref' }, R.refs.map(s => h('p', {}, s))) : null,
+        h('div', { class: 'calc-act' },
+          h('button', { class: 'btn', onclick: () => { Pro.addHist({ at: Date.now(), id: c.id, name: c.name, raw: { ...raw }, sum: R.rows.slice(0, 3).map(r => `${r.l}: ${nf(r.v, r.d)} ${r.u}`).join(' · ') }); this.toast('Salvo no histórico.', 'ok'); } }, ic('save'), 'Salvar no histórico'),
+          h('button', { class: 'btn primary', onclick: () => Pro.share(c.name, Pro.report(c, raw, R)) }, ic('chat'), 'Compartilhar relatório')));
+    };
+    const field = f => {
+      const id = 'pf-' + f.k;
+      let inp;
+      if (f.sel) { inp = h('select', { id, class: 'sel' }, f.sel.map(([val, lab]) => h('option', { value: val, selected: String(raw[f.k] ?? f.def) === String(val) || null }, lab))); inp.onchange = () => { raw[f.k] = inp.value; Pro.setInputs(c.id, raw); paint(); }; }
+      else { inp = h('input', { id, type: 'text', inputmode: 'decimal', value: raw[f.k] ?? '', placeholder: f.def != null ? `${String(f.def).replace('.', ',')} (referência)` : (f.ph || ''), autocomplete: 'off' }); inp.oninput = () => { raw[f.k] = inp.value.trim(); Pro.setInputs(c.id, raw); clearTimeout(this._pt); this._pt = setTimeout(paint, 150); }; }
+      return h('div', { class: 'field pf' + (f.need ? ' need' : '') }, h('label', { for: id }, f.l, f.u ? h('em', {}, ' ' + f.u) : null, f.need ? h('i', {}, ' *') : null), inp, f.hint ? h('small', {}, f.hint) : null);
+    };
+    const form = h('div', { class: 'calc-form' }, c.fields.map(field));
+    this.main.append(this.crumbs(['Diamante', c.name]),
+      h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, c.name), h('p', {}, c.desc)),
+        h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap' } },
+          (c.presets || []).map(([lab, vals]) => h('button', { class: 'btn ghost', onclick: () => { Object.assign(raw, Object.fromEntries(Object.entries(vals).map(([k, x]) => [k, String(x).replace('.', ',')]))); Pro.setInputs(c.id, raw); this.refresh(); } }, ic('spark'), 'Simular ' + lab)),
+          h('button', { class: 'btn ghost', onclick: () => { Pro.setInputs(c.id, {}); this.refresh(); } }, ic('refresh'), 'Limpar'))),
+      h('div', { class: 'calc-wrap' }, h('div', { class: 'panel' }, h('h3', {}, 'Dados'), form, h('p', { class: 'calc-note' }, '* obrigatório. Campos com "(referência)" usam o valor mostrado se você deixar em branco.')),
+        h('div', { class: 'panel' }, h('h3', {}, 'Resultado'), out)));
+    paint();
+  },
+  tHist() {
+    const L = Pro.hist();
+    this.main.append(this.crumbs(['Diamante', 'Histórico']), h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Histórico de cálculos'), h('p', {}, `${L.length} cálculos salvos neste aparelho.`)),
+      L.length ? h('button', { class: 'btn ghost', onclick: async () => { if (await this.confirm('Apagar histórico?', 'Os cálculos salvos serão apagados.')) { Store.set('proHist', []); this.refresh(); } } }, ic('trash'), 'Apagar') : null));
+    if (!L.length) return this.main.append(this.emptyBox('Nada salvo ainda', 'Em qualquer calculadora, toque em "Salvar no histórico".'));
+    this.main.append(h('div', { class: 'list' }, L.map(e => h('button', { class: 'row', style: { gridTemplateColumns: '1fr auto', textAlign: 'left' }, onclick: () => { Pro.setInputs(e.id, e.raw); this.go({ v: 'tool', id: e.id }); } },
+      h('div', {}, h('b', {}, e.name), h('small', { style: { display: 'block', color: 'var(--muted)' } }, e.sum)), h('small', { class: 'num', style: { color: 'var(--muted)' } }, new Date(e.at).toLocaleString('pt-BR'))))));
+  },
+});
+
+/* =========================================================================
+   💎 DIAMANTE — parte 2: medição, alinhamento, MEU PROJETO DE SOM e consultor
+   ========================================================================= */
+
+// ---------- gerador de sinais (sai pelo áudio do tablet: P2/Bluetooth/USB) ----------
+const SigGen = {
+  ctx: null, src: null, gain: null, mode: null, f: 1000, level: -18, sweep: { a: 20, b: 20000, s: 10 },
+  _ctx() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); return this.ctx; },
+  stop() { try { this.src && this.src.stop(); } catch {} try { this.src && this.src.disconnect(); } catch {} this.src = null; this.mode = null; clearTimeout(this._t); },
+  _out() { const c = this._ctx(); this.gain = c.createGain(); this.gain.gain.value = Math.pow(10, this.level / 20); this.gain.connect(c.destination); return this.gain; },
+  setLevel(db) { this.level = Math.min(-3, db); if (this.gain) this.gain.gain.setTargetAtTime(Math.pow(10, this.level / 20), this.ctx.currentTime, 0.03); },
+  setFreq(f) { this.f = f; if (this.mode === 'tone' && this.src) this.src.frequency.setTargetAtTime(f, this.ctx.currentTime, 0.02); },
+  tone(f) { this.stop(); const c = this._ctx(), o = c.createOscillator(); o.type = 'sine'; o.frequency.value = f || this.f; o.connect(this._out()); o.start(); this.src = o; this.mode = 'tone'; },
+  // ruído rosa: filtro de Paul Kellet (-3 dB/oitava) sobre ruído branco, 10 s em laço
+  pink() {
+    this.stop(); const c = this._ctx(), n = c.sampleRate * 10, buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < n; i++) { const w = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.96900 * b2 + w * 0.1538520; b3 = 0.86650 * b3 + w * 0.3104856; b4 = 0.55000 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.0168980;
+      d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11; b6 = w * 0.115926; }
+    const s = c.createBufferSource(); s.buffer = buf; s.loop = true; s.connect(this._out()); s.start(); this.src = s; this.mode = 'pink';
+  },
+  // varredura logarítmica (sweep) de a até b em s segundos, repetindo
+  sweepRun(onF) {
+    this.stop(); const c = this._ctx(), o = c.createOscillator(), { a, b, s } = this.sweep; o.type = 'sine';
+    const t0 = c.currentTime + 0.05; o.frequency.setValueAtTime(a, t0); o.frequency.exponentialRampToValueAtTime(b, t0 + s);
+    o.connect(this._out()); o.start(t0); o.stop(t0 + s + 0.05); this.src = o; this.mode = 'sweep';
+    const tick = () => { if (this.mode !== 'sweep' || this.src !== o) return; const el = c.currentTime - t0; onF && onF(Math.min(b, a * Math.pow(b / a, Math.max(0, el) / s))); if (el < s) this._t = setTimeout(tick, 100); else { this.mode = null; onF && onF(null); } };
+    tick();
+  },
+};
+
+// ---------- medições guardadas ----------
+const Meas = {
+  list() { return Store.get('meas', []); },
+  add(m) { const l = this.list(); l.unshift(m); Store.set('meas', l.slice(0, 20)); },
+  del(id) { Store.set('meas', this.list().filter(m => m.id !== id)); },
+  // picos e cancelamentos: compara cada banda com a média das vizinhas (±2/3 de oitava)
+  features(bands, freqs) {
+    const out = [];
+    bands.forEach((v, i) => {
+      if (freqs[i] < 30 || freqs[i] > 16000) return;
+      const nb = bands.slice(Math.max(0, i - 3), i).concat(bands.slice(i + 1, i + 4)); if (nb.length < 4) return;
+      const ref = nb.reduce((a, b) => a + b, 0) / nb.length, d = v - ref;
+      if (d >= 6) out.push({ f: freqs[i], d, k: 'pico' }); else if (d <= -8) out.push({ f: freqs[i], d, k: 'cancelamento' });
+    });
+    return out;
+  },
+};
+
+// ---------- MEU PROJETO DE SOM ----------
+const PJ_CATS = {
+  amp: { n: 'Amplificadores', one: 'amplificador', icon: 'bolt', fields: [F('name', 'Modelo', ''), F('qty', 'Quantidade', 'un.', { def: 1 }), F('rms', 'Potência RMS (no menor ohm usado)', 'W', { need: 1 }), F('ohm', 'Impedância mínima suportada', 'Ω', { def: 2 }), F('v', 'Tensão de alimentação do módulo', 'V', { def: 12.6 }), F('eff', 'Eficiência', '%', { def: 85, hint: 'Classe D ≈ 80–90%, classe AB ≈ 50–65%' })] },
+  spk: { n: 'Alto-falantes, drivers e tweeters', one: 'falante', icon: 'vol', fields: [F('name', 'Modelo', ''), F('kind', 'Tipo', '', { sel: [['grave', 'Grave / subwoofer'], ['medio', 'Médio / mid-bass'], ['driver', 'Driver'], ['tweeter', 'Tweeter / super tweeter']], def: 'grave' }), F('qty', 'Quantidade', 'un.', { def: 1 }), F('rms', 'Potência RMS de cada', 'W', { need: 1 }), F('ohm', 'Impedância de cada', 'Ω', { def: 4 })] },
+  bat: { n: 'Baterias', one: 'bateria', icon: 'bolt', fields: [F('tech', 'Tecnologia', '', { sel: Object.entries(BAT_TECH).map(([k, t]) => [k, t.n]), def: 'agm' }), F('qty', 'Quantidade', 'un.', { def: 1 }), F('v', 'Tensão de cada', 'V', { def: 12 }), F('ah', 'Capacidade de cada (C20)', 'Ah', { need: 1 }), F('s', 'Quantas em série', 'un.', { def: 1, hint: 'O resto fica em paralelo' })] },
+  hv: { n: 'Fontes (HV / automotivas)', one: 'fonte', icon: 'bolt', fields: [F('name', 'Modelo', ''), F('qty', 'Quantidade', 'un.', { def: 1 }), F('v', 'Tensão de saída', 'V', { need: 1 }), F('a', 'Corrente máxima de saída', 'A', { need: 1 })] },
+  gen: { n: 'Geradores', one: 'gerador', icon: 'bolt', fields: [F('name', 'Modelo', ''), F('kva', 'Potência', 'kVA', { need: 1 }), F('pf', 'Fator de potência', '', { def: 0.8 }), F('v', 'Tensão', 'V', { def: 220 })] },
+  rect: { n: 'Retificadores (pontes)', one: 'retificador', icon: 'calc', fields: [F('name', 'Modelo', ''), F('qty', 'Quantidade em paralelo', 'un.', { def: 1 }), F('a', 'Corrente nominal de cada', 'A', { need: 1 }), F('v', 'Tensão máxima (VRRM)', 'V', { ph: 'opcional' })] },
+  cap: { n: 'Capacitores e ultracapacitores', one: 'capacitor', icon: 'bolt', fields: [F('qty', 'Células/capacitores', 'un.', { need: 1 }), F('s', 'Quantos em série', 'un.', { def: 1 }), F('v', 'Tensão de cada', 'V', { need: 1, ph: 'ex.: 3' }), F('f', 'Capacitância de cada', 'F', { need: 1, ph: 'ex.: 3000' })] },
+  cab: { n: 'Cabos e barramentos', one: 'cabo', icon: 'calc', fields: [F('name', 'Trecho', '', { ph: 'ex.: banco → amplificadores' }), F('mm2', 'Bitola', 'mm²', { need: 1 }), F('par', 'Cabos em paralelo', 'un.', { def: 1 }), F('len', 'Comprimento (só ida)', 'm', { need: 1 }), F('mat', 'Material', '', { sel: Object.entries(MAT).map(([k, m]) => [k, m.n]), def: 'cu' }), F('fuse', 'Fusível/disjuntor', 'A', { ph: 'opcional' })] },
+};
+const Proj = {
+  all() { return Store.get('projects', []); },
+  save(p) { const l = this.all().filter(x => x.id !== p.id); l.unshift({ ...p, at: Date.now() }); Store.set('projects', l.slice(0, 30)); },
+  del(id) { Store.set('projects', this.all().filter(x => x.id !== id)); },
+  blank() { return { id: 'p' + Date.now().toString(36), name: 'Meu som', v: 12.6, regime: '25', items: Object.fromEntries(Object.keys(PJ_CATS).map(k => [k, []])) }; },
+  num(x, d) { const n = parseFloat(String(x ?? '').replace(',', '.')); return isFinite(n) ? n : d; },
+  // análise completa do sistema
+  analyze(p) {
+    const R = new CalcResult(), N = this.num, it = p.items, V = N(p.v, 12.6), duty = N(p.regime, 25) / 100;
+    const sum = (arr, f) => arr.reduce((a, x) => a + f(x), 0);
+    const amps = it.amp.map(a => ({ ...a, qty: N(a.qty, 1), rms: N(a.rms, 0), ohm: N(a.ohm, 2), v: N(a.v, 12.6), eff: N(a.eff, 85) / 100 }));
+    const spks = it.spk.map(s => ({ ...s, qty: N(s.qty, 1), rms: N(s.rms, 0), ohm: N(s.ohm, 4) }));
+    if (!amps.length && !spks.length) { R.need('Cadastre pelo menos os amplificadores e os alto-falantes para eu analisar.'); return R; }
+    const pAmp = sum(amps, a => a.qty * a.rms), pSpk = sum(spks, s => s.qty * s.rms);
+    R.row('Potência RMS dos amplificadores', pAmp, 'W', 'calc', 0, `Pamp = Σ(qtd × RMS) = ${nf(pAmp, 0)} W`);
+    R.row('Potência RMS dos alto-falantes', pSpk, 'W', 'calc', 0, `Pfal = Σ(qtd × RMS) = ${nf(pSpk, 0)} W`);
+    // consumo elétrico
+    const pin = sum(amps, a => a.qty * a.rms * duty / Math.max(0.3, a.eff));
+    const pinMax = sum(amps, a => a.qty * a.rms / Math.max(0.3, a.eff));
+    R.row(`Consumo médio (música, regime ${nf(duty * 100, 1)}%)`, pin, 'W', 'est', 0, `Pent = Σ(qtd × RMS × regime ÷ eficiência) = ${nf(pin, 0)} W`);
+    R.row('Consumo no pior caso (senoidal contínuo)', pinMax, 'W', 'est', 0, `Pmáx = Σ(qtd × RMS ÷ eficiência) = ${nf(pinMax, 0)} W`);
+    const I = pin / V, Imax = pinMax / V;
+    R.row(`Corrente média na tensão do sistema (${nf(V, 1)} V)`, I, 'A', 'est', 0, `I = P ÷ V = ${nf(pin, 0)} ÷ ${nf(V, 1)} = ${nf(I, 0)} A`);
+    R.row('Corrente de pico (pior caso)', Imax, 'A', 'est', 0, `Ipico = ${nf(pinMax, 0)} ÷ ${nf(V, 1)} = ${nf(Imax, 0)} A`);
+    // casamento amplificador × falante, por tipo
+    if (pAmp && pSpk) {
+      const r = pAmp / pSpk;
+      R.row('Relação potência amplificador ÷ falantes', r, '×', 'calc', 2, `r = ${nf(pAmp, 0)} ÷ ${nf(pSpk, 0)} = ${nf(r, 2)}`);
+      if (r > 1.5) R.alert('p', `Os amplificadores somam ${nf(r, 1)}× a potência dos falantes. Com o volume no máximo eles podem queimar falantes; use o limitador do processador.`);
+      else if (r < 0.5) R.alert('a', `Os amplificadores entregam só ${nf(r * 100, 0)}% da potência dos falantes. Funciona, mas o som pode clipar (distorcer) antes de render tudo.`);
+      else R.alert('ok', 'Potência dos amplificadores compatível com a dos falantes (entre 0,5× e 1,5×).');
+    }
+    const minAmpOhm = amps.length ? Math.min(...amps.map(a => a.ohm)) : null;
+    spks.forEach(s => { if (minAmpOhm != null && s.ohm < minAmpOhm) R.alert('a', `${s.name || PJ_CATS.spk.one} de ${nf(s.ohm, 1)} Ω está abaixo do mínimo de ${nf(minAmpOhm, 1)} Ω dos amplificadores: confira a ligação (série/paralelo) para não forçar o módulo.`); });
+    amps.forEach(a => { if (Math.abs(a.v - V) / V > 0.35) R.alert('p', `${a.name || 'Amplificador'} é de ${nf(a.v, 1)} V e o sistema está em ${nf(V, 1)} V. Tensão errada pode queimar o módulo ou limitar a potência.`); });
+    // alimentação disponível
+    let supplyW = 0, notes = [];
+    const hv = it.hv.map(x => ({ q: N(x.qty, 1), v: N(x.v, 0), a: N(x.a, 0) }));
+    const hvW = sum(hv, x => x.q * x.v * x.a);
+    if (hvW) { R.row('Potência das fontes', hvW, 'W', 'calc', 0, `Pfontes = Σ(qtd × V × A) = ${nf(hvW, 0)} W`); supplyW += hvW; notes.push('fontes'); hv.forEach(x => { if (Math.abs(x.v - V) / V > 0.25) R.alert('a', `Fonte de ${nf(x.v, 1)} V num sistema de ${nf(V, 1)} V: confira se está certo.`); }); }
+    const gen = it.gen.map(g => ({ kva: N(g.kva, 0), pf: N(g.pf, 0.8) }));
+    const genW = sum(gen, g => g.kva * 1000 * g.pf);
+    if (genW) { R.row('Potência ativa dos geradores', genW, 'W', 'calc', 0, `P = kVA × FP × 1000 = ${nf(genW, 0)} W`); if (!hvW) { supplyW += genW * 0.9; notes.push('gerador (−10% de perdas na retificação)'); } }
+    const rectA = sum(it.rect, r => N(r.qty, 1) * N(r.a, 0));
+    if (rectA) { R.row('Corrente das pontes retificadoras', rectA, 'A', 'calc', 0, `Iret = Σ(qtd × A) = ${nf(rectA, 0)} A`); if (rectA < I * 1.5) R.alert('p', `As pontes somam ${nf(rectA, 0)} A e o consumo médio é ${nf(I, 0)} A. Use pelo menos 1,5× a corrente (${nf(I * 1.5, 0)} A) e dissipador.`); }
+    if (genW && genW * 0.9 < pin) R.alert('p', `O gerador entrega ~${nf(genW * 0.9, 0)} W úteis e o consumo médio estimado é ${nf(pin, 0)} W: ele vai cair de rotação/tensão.`);
+    // baterias
+    let bankWh = 0, bankImax = 0;
+    it.bat.forEach(b => {
+      const t = BAT_TECH[b.tech] || BAT_TECH.agm, q = N(b.qty, 1), s = Math.max(1, Math.round(N(b.s, 1))), p = Math.max(1, Math.floor(q / s));
+      const vb = N(b.v, 12) * s, ah = N(b.ah, 0) * p, wh = vb * ah * t.dod / 100; bankWh += wh; bankImax += ah * t.cmax * 3;
+      R.row(`Banco de baterias (${s}S × ${p}P)`, vb, 'V', 'calc', 1, `Vbanco = ${s} × ${nf(N(b.v, 12), 1)} V; Ah = ${p} × ${nf(N(b.ah, 0), 0)} = ${nf(ah, 0)} Ah`);
+      R.row('Energia útil do banco', wh, 'Wh', 'calc', 0, `E = V × Ah × DoD = ${nf(vb, 1)} × ${nf(ah, 0)} × ${t.dod}% = ${nf(wh, 0)} Wh`);
+      if (s * p !== q) R.alert('a', `${q} baterias não fecham ${s} em série × ${p} em paralelo: sobra ${q - s * p}. Baterias soltas desequilibram o banco.`);
+      if (Math.abs(vb - V) / V > 0.2) R.alert('p', `Banco de ${nf(vb, 1)} V num sistema de ${nf(V, 1)} V.`);
+    });
+    if (bankWh && pin) { const h = bankWh / pin; R.row('Autonomia estimada só na bateria', h * 60, 'min', 'est', 0, `t = Eútil ÷ Pmédia = ${nf(bankWh, 0)} ÷ ${nf(pin, 0)} = ${nf(h, 2)} h (sem Peukert; real é menor)`); if (h < 0.25 && !supplyW) R.alert('a', 'Menos de 15 minutos de som só na bateria. Considere fonte/alternador reforçado ou banco maior.'); }
+    // ultracapacitores
+    it.cap.forEach(c => {
+      const q = N(c.qty, 1), s = Math.max(1, Math.round(N(c.s, 1))), p = Math.max(1, Math.floor(q / s)), vc = N(c.v, 3), f = N(c.f, 0);
+      const Ceq = f * p / s, Vmax = vc * s, E = 0.5 * Ceq * Vmax * Vmax;
+      R.row(`Ultracaps (${s}S × ${p}P) capacitância`, Ceq, 'F', 'calc', 2, `Ceq = C × P ÷ S = ${nf(f, 0)} × ${p} ÷ ${s} = ${nf(Ceq, 2)} F`);
+      R.row('Tensão máxima do conjunto', Vmax, 'V', 'calc', 1, `Vmáx = ${s} × ${nf(vc, 2)} V`);
+      R.row('Energia armazenada', E / 3600, 'Wh', 'calc', 2, `E = ½·C·V² = ½ × ${nf(Ceq, 2)} × ${nf(Vmax, 1)}² = ${nf(E, 0)} J = ${nf(E / 3600, 2)} Wh`);
+      if (Vmax < V * 1.05) R.alert('p', `O conjunto aguenta ${nf(Vmax, 1)} V e o sistema chega a ${nf(V, 1)} V: falta folga (mínimo ~5%). Coloque mais uma célula em série.`);
+      if (s > 1) R.alert('d', `${s} células em série precisam de balanceamento em cada célula para nenhuma passar de ${nf(vc, 2)} V.`);
+    });
+    // cabos
+    it.cab.forEach(c => {
+      const mm2 = N(c.mm2, 0) * Math.max(1, N(c.par, 1)), L = N(c.len, 0), m = MAT[c.mat] ? c.mat : 'cu';
+      if (!mm2 || !L) return;
+      const Rc = rhoAt(m, 50) * L * 2 / mm2, dv = Rc * I, dvPct = dv / V * 100, J = I / mm2;
+      R.row(`Queda no cabo "${c.name || nf(N(c.mm2, 0), 0) + ' mm²'}"`, dv, 'V', 'est', 2, `ΔV = ρ(50 °C) × 2L ÷ A × I = ${nfx(rhoAt(m, 50), 4)} × ${nf(2 * L, 1)} ÷ ${nf(mm2, 1)} × ${nf(I, 0)} = ${nf(dv, 2)} V (${nf(dvPct, 1)}%)`);
+      if (dvPct > 5) R.alert('p', `Queda de ${nf(dvPct, 1)}% no cabo "${c.name || ''}": aumente a bitola ou encurte. Bitola indicada: ${nextUp(SEC_MM2, I / J_CABLE) || '> 300'} mm².`);
+      else if (dvPct > 3) R.alert('a', `Queda de ${nf(dvPct, 1)}% no cabo "${c.name || ''}" (o ideal é até 3%).`);
+      if (J > 6) R.alert('p', `Cabo "${c.name || ''}" com ${nf(J, 1)} A/mm²: vai esquentar. Referência: até ${J_CABLE} A/mm² em uso contínuo.`);
+      const fz = N(c.fuse, 0); if (fz && fz > mm2 * 6) R.alert('p', `Fusível de ${nf(fz, 0)} A grande demais para ${nf(mm2, 0)} mm² — o cabo pode pegar fogo antes de o fusível abrir.`);
+      if (!fz) R.alert('a', `Cabo "${c.name || ''}" sem fusível informado. Todo positivo precisa de proteção perto da fonte/bateria.`);
+    });
+    // necessidade total
+    const need = pin * 1.25;
+    R.row('Alimentação recomendada (consumo médio + 25%)', need, 'W', 'est', 0, `Pnec = Pmédia × 1,25 = ${nf(need, 0)} W`);
+    R.row('Bitola recomendada do cabo principal', nextUp(SEC_MM2, I / J_CABLE) || 300, 'mm²', 'est', 0, `A ≥ I ÷ ${J_CABLE} A/mm² = ${nf(I / J_CABLE, 1)} mm²`);
+    R.row('Fusível principal sugerido', nextUp(FUSES, I * 1.25) || 1000, 'A', 'est', 0, `Ifus ≥ 1,25 × I = ${nf(I * 1.25, 0)} A (e nunca acima do que o cabo aguenta)`);
+    if (supplyW) { if (supplyW < pin) R.alert('p', `A alimentação cadastrada (${notes.join(' + ')}: ${nf(supplyW, 0)} W) é menor que o consumo médio (${nf(pin, 0)} W). A tensão vai cair com o som alto.`); else if (supplyW < need) R.alert('a', `Alimentação (${nf(supplyW, 0)} W) cobre o consumo, mas com folga menor que 25%.`); else R.alert('ok', `Alimentação (${nf(supplyW, 0)} W) cobre o consumo médio com folga.`); }
+    else if (!bankWh) R.alert('a', 'Nenhuma fonte, gerador ou bateria cadastrada: cadastre a alimentação para eu conferir se dá conta.');
+    if (V > 60) R.alert('p', `Sistema de ${nf(V, 0)} V: tensão perigosa ao toque. Use isolação, chave geral, pré-carga dos capacitores e nunca trabalhe com o banco carregado.`);
+    R.ref('Valores ESTIMADOS usam o regime de música escolhido e a eficiência informada. Para confirmar, meça corrente com alicate amperímetro e tensão no voltímetro do app.');
+    return R;
+  },
+};
+
+Object.assign(UI, {
+  /* ---------- gerador de sinais ---------- */
+  tSig() {
+    const fv = h('b', { class: 'num sg-f' }, fmtHz(SigGen.f) + 'Hz');
+    const st = h('small', { class: 'sg-st' }, 'Parado');
+    const fsl = h('input', { type: 'range', min: 0, max: 1000, value: Math.round(Math.log(SigGen.f / 20) / Math.log(1000) * 1000), class: 'wide' });
+    const setF = f => { f = clamp(Math.round(f), 20, 20000); SigGen.setFreq(f); fv.textContent = fmtHz(f) + 'Hz'; fsl.value = Math.round(Math.log(f / 20) / Math.log(1000) * 1000); };
+    fsl.oninput = () => setF(20 * Math.pow(1000, fsl.value / 1000));
+    const lv = h('input', { type: 'range', min: -48, max: -6, step: 1, value: SigGen.level, class: 'wide' }); const lvb = h('b', { class: 'num' }, SigGen.level + ' dBFS');
+    lv.oninput = () => { SigGen.setLevel(+lv.value); lvb.textContent = lv.value + ' dBFS'; };
+    const run = (m) => {
+      if (m === 'tone') { SigGen.tone(SigGen.f); st.textContent = 'Tocando tom de ' + fmtHz(SigGen.f) + 'Hz'; }
+      if (m === 'pink') { SigGen.pink(); st.textContent = 'Tocando ruído rosa'; }
+      if (m === 'sweep') { SigGen.sweepRun(f => { if (f == null) { st.textContent = 'Varredura concluída'; return; } fv.textContent = fmtHz(f) + 'Hz'; st.textContent = 'Varrendo…'; }); }
+      if (m === 'stop') { SigGen.stop(); st.textContent = 'Parado'; }
+    };
+    const sw = (k, l, u) => { const i = h('input', { type: 'number', value: SigGen.sweep[k], inputmode: 'numeric' }); i.onchange = () => { SigGen.sweep[k] = clamp(+i.value || SigGen.sweep[k], k === 's' ? 2 : 20, k === 's' ? 120 : 20000); }; return h('div', { class: 'field' }, h('label', {}, l + ' (' + u + ')'), i); };
+    this.main.append(this.crumbs(['Diamante', 'Gerador de sinais']),
+      h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Gerador de sinais'), h('p', {}, 'Tom de 20 Hz a 20 kHz, ruído rosa e varredura. Sai pelo áudio do tablet (cabo P2, Bluetooth ou USB) para a entrada do processador.'))),
+      h('div', { class: 'tip', style: { marginBottom: '14px' } }, h('span', { class: 'lv p' }, 'PERIGO'), h('div', {}, h('b', {}, 'Comece com o volume do som BAIXO'), h('small', {}, 'Tom contínuo em agudo queima driver e tweeter em segundos. Grave abaixo do corte do falante também danifica. Suba aos poucos.'))),
+      h('div', { class: 'calc-wrap' },
+        h('div', { class: 'panel' }, h('h3', {}, 'Frequência'), h('div', { class: 'sg-head' }, fv, st), fsl,
+          h('div', { class: 'chips' }, [20, 31.5, 40, 50, 63, 80, 100, 125, 160, 250, 500, 1000, 2000, 4000, 8000, 12500, 16000, 20000].map(f => h('button', { class: 'chip', onclick: () => { setF(f); if (SigGen.mode !== 'tone') run('tone'); } }, fmtHz(f)))),
+          h('div', { class: 'sg-row' }, h('button', { class: 'btn', onclick: () => setF(SigGen.f / Math.pow(2, 1 / 3)) }, '− 1/3 oitava'), h('button', { class: 'btn', onclick: () => setF(SigGen.f * Math.pow(2, 1 / 3)) }, '+ 1/3 oitava')),
+          h('h3', { style: { marginTop: '16px' } }, 'Nível do sinal'), h('div', { class: 'sg-head' }, lvb), lv),
+        h('div', { class: 'panel' }, h('h3', {}, 'Sinal'),
+          h('div', { class: 'sg-btns' },
+            h('button', { class: 'btn primary', onclick: () => run('tone') }, ic('play'), 'Tom senoidal'),
+            h('button', { class: 'btn primary', onclick: () => run('pink') }, ic('wave'), 'Ruído rosa'),
+            h('button', { class: 'btn primary', onclick: () => run('sweep') }, ic('wave'), 'Varredura'),
+            h('button', { class: 'btn hot', onclick: () => run('stop') }, ic('pause'), 'PARAR')),
+          h('h3', { style: { marginTop: '16px' } }, 'Varredura'), h('div', { class: 'calc-form' }, sw('a', 'De', 'Hz'), sw('b', 'Até', 'Hz'), sw('s', 'Duração', 's')),
+          h('p', { class: 'calc-note' }, 'Ruído rosa tem a mesma energia por oitava: é o sinal certo para medir com o RTA. O processador também tem ruído rosa interno (aba Ajustes IA).'))));
+  },
+  /* ---------- medição com microfone ---------- */
+  tMeas() {
+    const BF = Assist.BANDS3.filter(f => f <= 20000);
+    const status = h('small', { class: 'sg-st' }, Assist.rta.running ? 'Microfone ligado' : 'Microfone desligado');
+    const COL = ['#ffb23f', '#c47bff', '#4ade80', '#ff5e7a'];
+    this._cmp = this._cmp || [];
+    let measuring = 0, loop = null;
+    const g = this.graph({ height: 300, min: -30, max: 15, legend: [['#3ec6e0', 'Ao vivo'], ['#ffb23f', 'Média atual'], ['#c47bff', 'Comparações']],
+      draw: (c, G) => {
+        const rel = arr => { const mid = arr.filter((_, i) => BF[i] >= 250 && BF[i] <= 4000); const r = mid.reduce((a, b) => a + b, 0) / (mid.length || 1); return arr.map(v => v - r); };
+        const line = (arr, color, w, dash) => { if (!arr) return; const a = rel(arr); c.beginPath(); BF.forEach((f, i) => { const y = G.y(clamp(a[i], -30, 15)); i ? c.lineTo(G.x(f), y) : c.moveTo(G.x(f), y); }); c.setLineDash(dash || []); c.strokeStyle = color; c.lineWidth = w; c.stroke(); c.setLineDash([]); };
+        if (Assist.rta.bands && Assist.rta.bands.length) { const a = rel(Assist.rta.bands); const w = G.W / BF.length * .7; BF.forEach((f, i) => { const y = G.y(clamp(a[i], -30, 15)); c.fillStyle = 'rgba(62,198,224,.28)'; c.fillRect(G.x(f) - w / 2, y, w, G.H - y); }); }
+        this._cmp.forEach((id, k) => { const m = Meas.list().find(x => x.id === id); if (m) line(m.bands, COL[(k + 1) % 4], 2, [6, 4]); });
+        line(Assist.averaged(), '#ffb23f', 3);
+      } });
+    const feats = h('div');
+    const paintFeats = () => {
+      const avg = Assist.averaged(); if (!avg) { feats.replaceChildren(); return; }
+      const fs = Meas.features(avg, BF);
+      feats.replaceChildren(h('div', { class: 'panel', style: { marginTop: '12px' } }, h('h3', {}, 'Picos e cancelamentos encontrados ', h('i', { class: 'ktag k-med' }, 'MEDIDO')),
+        fs.length ? h('div', { class: 'calc-alerts' }, fs.map(x => h('div', { class: 'tip' }, h('span', { class: 'lv ' + (x.k === 'pico' ? 'a' : 'd') }, x.k.toUpperCase()), h('div', {}, h('b', {}, `${fmtHz(x.f)}Hz: ${x.d > 0 ? '+' : ''}${x.d.toFixed(1)} dB`),
+          h('small', {}, x.k === 'pico' ? 'Ressonância: corte com um PEQ (Q 2 a 4) nesta frequência.' : 'Cancelamento: normalmente é fase/posição. Não adianta reforçar no EQ; teste inverter polaridade ou mudar o delay.'))))) : h('p', { style: { color: 'var(--muted)' } }, 'Nenhum pico acima de +6 dB nem buraco abaixo de −8 dB. Resposta equilibrada.')));
+    };
+    const tick = () => { if (!Assist.rta.running || !document.body.contains(g)) { loop = null; return; } Assist.frame(measuring > Date.now()); g.G.paint(); if (measuring && measuring <= Date.now()) { measuring = 0; status.textContent = 'Medição pronta'; paintFeats(); } loop = requestAnimationFrame(tick); };
+    const saved = h('div', { class: 'list' });
+    const paintSaved = () => saved.replaceChildren(...Meas.list().map(m => h('div', { class: 'row', style: { gridTemplateColumns: 'auto 1fr auto auto' } },
+      h('input', { type: 'checkbox', checked: this._cmp.includes(m.id) || null, onchange: e => { this._cmp = e.target.checked ? [...this._cmp, m.id].slice(-3) : this._cmp.filter(x => x !== m.id); g.G.paint(); paintSaved(); }, 'aria-label': 'Comparar' }),
+      h('div', {}, h('b', {}, m.name), h('small', { style: { display: 'block', color: 'var(--muted)' } }, new Date(m.at).toLocaleString('pt-BR'))),
+      iconBtn('chat', 'Compartilhar', () => Pro.share(m.name, `${CONFIG.APP} · Medição "${m.name}" (${new Date(m.at).toLocaleString('pt-BR')})\n` + BF.map((f, i) => `${fmtHz(f)}Hz: ${m.bands[i].toFixed(1)} dB`).join('\n'))),
+      iconBtn('trash', 'Apagar', () => { Meas.del(m.id); this._cmp = this._cmp.filter(x => x !== m.id); paintSaved(); g.G.paint(); }))));
+    this.main.append(this.crumbs(['Diamante', 'Medição com microfone']),
+      h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Medição com microfone'), h('p', {}, 'Analisador RTA em 1/3 de oitava, resposta de frequência, picos, cancelamentos e comparação entre medições.'))),
+      h('div', { class: 'panel', style: { marginBottom: '12px' } },
+        h('div', { class: 'sg-btns' },
+          h('button', { class: 'btn', onclick: async () => { if (Assist.rta.running) { Assist.stopMic(); status.textContent = 'Microfone desligado'; return; } try { await Assist.startMic(); status.textContent = 'Microfone ligado'; if (!loop) loop = requestAnimationFrame(tick); } catch (e) { status.textContent = 'Microfone bloqueado: ' + (e.message || 'permita o microfone'); } } }, ic('mic'), 'Microfone liga/desliga'),
+          h('button', { class: 'btn primary', onclick: () => { if (!Assist.rta.running) { status.textContent = 'Ligue o microfone primeiro'; return; } measuring = Date.now() + 10000; status.textContent = 'Medindo 10 s… (as medições somam)'; } }, ic('play'), 'Medir 10 s'),
+          h('button', { class: 'btn', onclick: async () => { const avg = Assist.averaged(); if (!avg) { this.toast('Faça uma medição primeiro.', 'bad'); return; } const n = await this.ask('Nome da medição', 'ex.: antes da regulagem'); if (!n) return; Meas.add({ id: 'm' + Date.now().toString(36), name: n, at: Date.now(), bands: avg }); paintSaved(); this.toast('Medição salva.', 'ok'); } }, ic('save'), 'Salvar medição'),
+          h('button', { class: 'btn ghost', onclick: () => { Assist.rta.avg = null; Assist.rta.n = 0; feats.replaceChildren(); g.G.paint(); status.textContent = 'Média zerada'; } }, 'Zerar média'),
+          h('button', { class: 'btn ghost', onclick: () => this.go({ v: 'tool', id: '_siggen' }) }, ic('vol'), 'Gerador de sinais'), status),
+        h('p', { class: 'calc-note' }, 'Curvas mostradas em relação à média de 250 Hz–4 kHz (0 dB). Microfone de tablet mede pouco abaixo de ~35 Hz e não é calibrado: use para comparar, não como valor absoluto de SPL.')),
+      g, feats, h('div', { class: 'section-title' }, h('h2', {}, 'Medições salvas'), h('small', {}, 'Marque até 3 para comparar')), saved);
+    paintSaved(); if (Assist.averaged()) paintFeats();
+    if (Assist.rta.running && !loop) loop = requestAnimationFrame(tick);
+  },
+  /* ---------- polaridade e fase pelo microfone ---------- */
+  tPol() {
+    const s = Dsp.s, live = App.transport instanceof BleTransport && App.transport.connected;
+    const st = this._pol || (this._pol = { ch: 1, fc: 80, a: null, b: null });
+    const chSel = h('select', { class: 'sel' }, s.outs.map((o, i) => h('option', { value: i, selected: i === st.ch || null }, `${i + 1}. ${o.name}`))); chSel.onchange = () => { st.ch = +chSel.value; };
+    const fc = h('input', { type: 'number', value: st.fc, inputmode: 'numeric' }); fc.onchange = () => { st.fc = clamp(+fc.value || 80, 20, 20000); };
+    const out = h('div'), msg = h('small', { class: 'sg-st' }, '');
+    const level = () => { const avg = Assist.averaged(); if (!avg) return null; const BF = Assist.BANDS3.filter(f => f <= 20000); const sel = avg.filter((_, i) => BF[i] >= st.fc / 1.6 && BF[i] <= st.fc * 1.6); return 10 * Math.log10(sel.reduce((a, v) => a + Math.pow(10, v / 10), 0) / sel.length); };
+    const measure = (key) => new Promise(async res => {
+      try { if (!Assist.rta.running) await Assist.startMic(); } catch (e) { msg.textContent = 'Microfone bloqueado.'; return res(); }
+      Assist.rta.avg = null; Assist.rta.n = 0; msg.textContent = 'Medindo 6 s…'; const end = Date.now() + 6000;
+      const loop = () => { Assist.frame(true); if (Date.now() < end) requestAnimationFrame(loop); else { st[key] = level(); msg.textContent = 'Pronto.'; res(); paint(); } }; loop();
+    });
+    const paint = () => {
+      out.replaceChildren();
+      if (st.a == null || st.b == null) return;
+      const d = st.a - st.b, keepInv = d < 0;
+      out.append(h('div', { class: 'panel', style: { marginTop: '12px' } }, h('h3', {}, 'Resultado ', h('i', { class: 'ktag k-med' }, 'MEDIDO')),
+        h('div', { class: 'calc-rows' },
+          h('div', { class: 'crow' }, h('span', {}, 'Nível no corte, polaridade normal'), h('b', { class: 'num' }, st.a.toFixed(1), h('small', {}, ' dB')), h('i', { class: 'ktag k-med' }, 'MEDIDO')),
+          h('div', { class: 'crow' }, h('span', {}, 'Nível no corte, invertida'), h('b', { class: 'num' }, st.b.toFixed(1), h('small', {}, ' dB')), h('i', { class: 'ktag k-med' }, 'MEDIDO'))),
+        h('div', { class: 'tip' }, h('span', { class: 'lv ' + (Math.abs(d) < 1.5 ? 'a' : 'ok') }, Math.abs(d) < 1.5 ? 'INCONCLUSIVO' : 'CONCLUSÃO'),
+          h('div', {}, h('b', {}, Math.abs(d) < 1.5 ? 'Diferença menor que 1,5 dB' : keepInv ? `Use a saída ${st.ch + 1} INVERTIDA (+${(-d).toFixed(1)} dB no corte)` : `Deixe a saída ${st.ch + 1} NORMAL (+${d.toFixed(1)} dB no corte)`),
+            h('small', {}, Math.abs(d) < 1.5 ? 'As vias quase não se somam no corte: confira o crossover (pode haver buraco) e o delay, depois repita.' : 'Na polaridade certa as duas vias se somam no corte e o som fica mais cheio nessa região.'))),
+        live && keepInv && Math.abs(d) >= 1.5 ? h('button', { class: 'btn primary', onclick: () => { s.outs[st.ch].phase = !s.outs[st.ch].phase; Dsp.send.phase(st.ch); Dsp.save(); this.toast('Polaridade trocada no processador.', 'ok'); } }, 'Aplicar no processador') : null));
+    };
+    const flip = () => { if (!live) return; s.outs[st.ch].phase = !s.outs[st.ch].phase; Dsp.send.phase(st.ch); };
+    this.main.append(this.crumbs(['Diamante', 'Polaridade e fase']),
+      h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Polaridade e fase entre vias'), h('p', {}, 'Mede o nível na frequência de corte com a via normal e invertida. A ligação certa é a que soma mais.'))),
+      h('div', { class: 'panel' },
+        h('ol', { class: 'steps' }, h('li', {}, 'Escolha a via a testar (ex.: o médio) e a frequência de corte com a via vizinha.'), h('li', {}, 'Ligue o ruído rosa (processador ou Gerador de sinais) com as DUAS vias tocando.'), h('li', {}, 'Meça "normal", depois inverta a via e meça "invertida".' + (live ? ' O app inverte sozinho.' : ' Inverta pelo app ou pelo fio.'))),
+        h('div', { class: 'calc-form' }, h('div', { class: 'field' }, h('label', {}, 'Via a testar'), chSel), h('div', { class: 'field' }, h('label', {}, 'Frequência de corte (Hz)'), fc)),
+        h('div', { class: 'sg-btns', style: { marginTop: '10px' } },
+          h('button', { class: 'btn primary', onclick: () => measure('a') }, '1. Medir NORMAL'),
+          h('button', { class: 'btn primary', onclick: async () => { flip(); await sleep(400); await measure('b'); flip(); } }, '2. Medir INVERTIDA'), msg)), out);
+    paint();
+  },
+  /* ---------- delay por distância ---------- */
+  tDelay() {
+    const s = Dsp.s, st = this._dl || (this._dl = { t: 25 });
+    const res = h('div');
+    const tIn = h('input', { type: 'number', value: st.t, inputmode: 'decimal' });
+    const paint = () => {
+      const c = 331.3 + 0.606 * st.t, ds = s.outs.map(o => (o.dist || 0) / 100), valid = ds.filter(d => d > 0);
+      if (!valid.length) { res.replaceChildren(h('div', { class: 'calc-miss' }, ic('info'), 'Meça com a trena a distância de cada alto-falante até a cabeça do motorista (ou ponto de escuta) e preencha.')); return; }
+      const max = Math.max(...valid), dl = ds.map(d => d > 0 ? (max - d) / c * 1000 : 0);
+      res.replaceChildren(h('div', { class: 'calc-rows' }, h('div', { class: 'crow' }, h('span', {}, 'Velocidade do som a ' + nf(st.t, 1) + ' °C'), h('b', { class: 'num' }, nf(c, 1), h('small', {}, ' m/s')), h('i', { class: 'ktag k-calc' }, 'CALCULADO')),
+        ...s.outs.map((o, i) => ds[i] > 0 ? h('div', { class: 'crow' }, h('span', {}, `${i + 1}. ${o.name}`), h('b', { class: 'num' }, nfx(dl[i], 2), h('small', {}, ' ms')), h('i', { class: 'ktag k-calc' }, 'CALCULADO')) : null)),
+        h('details', { class: 'calc-mem', open: true }, h('summary', {}, 'Memória de cálculo'), h('ol', {}, h('li', { class: 'num' }, `c = 331,3 + 0,606 × T = ${nf(c, 1)} m/s`), h('li', { class: 'num' }, `Delay = (dmáx − d) ÷ c; dmáx = ${nf(max, 2)} m (o mais longe fica com 0 ms)`))),
+        h('button', { class: 'btn primary', style: { marginTop: '10px' }, onclick: () => { s.outs.forEach((o, i) => { o.delay = Math.round(dl[i] * 10) / 10; }); Dsp.send.delay(); Dsp.save(); this.toast('Delays enviados ao processador.', 'ok'); } }, 'Enviar delays ao processador'));
+    };
+    tIn.oninput = () => { st.t = parseFloat(String(tIn.value).replace(',', '.')) || 25; paint(); };
+    this.main.append(this.crumbs(['Diamante', 'Delay por distância']),
+      h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Delay por distância'), h('p', {}, 'Atrasa os alto-falantes mais perto para o som de todos chegar junto no ponto de escuta.'))),
+      h('div', { class: 'calc-wrap' },
+        h('div', { class: 'panel' }, h('h3', {}, 'Distâncias (cm)'), h('div', { class: 'field' }, h('label', {}, 'Temperatura dentro do carro (°C)'), tIn),
+          h('div', { class: 'calc-form' }, s.outs.map((o, i) => { const inp = h('input', { type: 'number', value: o.dist || '', placeholder: '0', inputmode: 'numeric' }); inp.oninput = () => { o.dist = Math.max(0, +inp.value || 0); Dsp.save(); paint(); }; return h('div', { class: 'field' }, h('label', {}, `${i + 1}. ${o.name}`), inp); }))),
+        h('div', { class: 'panel' }, h('h3', {}, 'Resultado'), res)));
+    paint();
+  },
+  /* ---------- crossover e sobreposição (lê as saídas) ---------- */
+  tOverlap() {
+    const s = Dsp.s, act = s.outs.map((o, i) => ({ o, i })).filter(({ o }) => o.on !== false && o.xo && (D.XO_TYPES[o.xo.hpT]?.fam !== 'off' || D.XO_TYPES[o.xo.lpT]?.fam !== 'off'));
+    const lo = o => D.XO_TYPES[o.xo.hpT]?.fam === 'off' ? 20 : o.xo.hpF, hi = o => D.XO_TYPES[o.xo.lpT]?.fam === 'off' ? 20000 : o.xo.lpF;
+    const g = this.graph({ height: 280, min: -30, max: 6, legend: act.map(({ o, i }) => [D.COLORS[i], `${i + 1}. ${o.name}`]),
+      draw: (c, G) => act.forEach(({ o, i }) => G.curve(c, f => Resp.xo(f, o.xo.hpF, o.xo.hpT, o.xo.lpF, o.xo.lpT), D.COLORS[i], 2.4, true)) });
+    const groups = new Map(); act.forEach(x => { const k = lo(x.o) + '-' + hi(x.o); if (!groups.has(k)) groups.set(k, x); });
+    const ways = [...groups.values()].sort((a, b) => lo(a.o) - lo(b.o));
+    const tips = [];
+    for (let k = 1; k < ways.length; k++) {
+      const A = ways[k - 1].o, B = ways[k].o, a = hi(A), b = lo(B), oct = Math.log2(b / a);
+      if (oct > 0.17) tips.push(['a', `Buraco entre "${A.name}" (corta em ${fmtHz(a)}Hz) e "${B.name}" (começa em ${fmtHz(b)}Hz): ${nf(oct, 2)} oitava sem som.`, `Aproxime os cortes. O normal é os dois na mesma frequência com Linkwitz-Riley 24 dB.`]);
+      else if (oct < -0.34) tips.push(['a', `Sobreposição de ${nf(-oct, 2)} oitava entre "${A.name}" e "${B.name}" (${fmtHz(b)}–${fmtHz(a)}Hz).`, 'As duas vias tocam juntas e somam: costuma virar um pico ou cancelamento nessa faixa. Feche os cortes.']);
+      else tips.push(['ok', `"${A.name}" → "${B.name}": corte em ${fmtHz(a)}${a !== b ? '/' + fmtHz(b) : ''}Hz bem casado.`, 'Confirme a polaridade com a ferramenta de polaridade.']);
+    }
+    act.forEach(({ o }) => { const t = (o.name || '').toLowerCase(); if (/twee|driver|agudo/.test(t) && lo(o) < 1500) tips.push(['p', `"${o.name}" começa em ${fmtHz(lo(o))}Hz: grave demais para driver/tweeter.`, 'Driver de corneta costuma começar acima de 1–2 kHz e tweeter acima de 3–5 kHz (veja o manual do fabricante).']); if (D.XO_TYPES[o.xo.hpT]?.fam === 'off' && /twee|driver|m[eé]dio|mid/.test(t)) tips.push(['p', `"${o.name}" está sem passa-alta (HPF desligado).`, 'Sem passa-alta, grave chega no falante pequeno e pode danificá-lo.']); });
+    this.main.append(this.crumbs(['Diamante', 'Crossover e sobreposição']),
+      h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Crossover e sobreposição'), h('p', {}, 'Mostra a resposta dos filtros de cada saída e onde há buracos ou sobreposição entre as vias.'))),
+      !Dsp.synced ? h('div', { class: 'tip', style: { marginBottom: '12px' } }, h('span', { class: 'lv a' }, 'ATENÇÃO'), h('div', {}, h('b', {}, 'Usando os valores da tela'), h('small', {}, 'Leia as regulagens do processador (aba Ajustes) para analisar o que está gravado nele.'))) : null,
+      act.length ? g : this.emptyBox('Nenhuma saída com crossover', 'Configure os filtros na aba Ajustes.'),
+      h('div', { class: 'calc-alerts', style: { marginTop: '12px' } }, tips.map(([lv, t, d]) => h('div', { class: 'tip' }, h('span', { class: 'lv ' + lv }, LVN[lv]), h('div', {}, h('b', {}, t), h('small', {}, d))))));
+  },
+  /* ---------- MEU PROJETO DE SOM ---------- */
+  vProj(cv) {
+    if (!License.premiumUsable()) { this.main.append(this.emptyBox('Ferramenta do Diamante', 'Libere o Plano Diamante para usar.', h('button', { class: 'btn primary', onclick: () => this.switchTab('pro') }, ic('gem'), 'Ver Diamante'))); return; }
+    const all = Proj.all();
+    let p = all.find(x => x.id === cv.pid) || this._proj;
+    if (!p) { p = all[0] || Proj.blank(); }
+    this._proj = p; cv.pid = p.id;
+    for (const k of Object.keys(PJ_CATS)) p.items[k] = p.items[k] || [];
+    const save = () => { Proj.save(p); };
+    const R = Proj.analyze(p);
+    const editItem = (cat, idx) => {
+      const C = PJ_CATS[cat], raw = idx != null ? { ...p.items[cat][idx] } : {};
+      const form = h('div', { class: 'calc-form' }, C.fields.map(f => {
+        let inp; if (f.sel) { inp = h('select', { class: 'sel' }, f.sel.map(([v, l]) => h('option', { value: v, selected: String(raw[f.k] ?? f.def) === v || null }, l))); inp.onchange = () => { raw[f.k] = inp.value; }; if (raw[f.k] == null) raw[f.k] = f.def; }
+        else { inp = h('input', { type: 'text', inputmode: f.k === 'name' ? 'text' : 'decimal', value: raw[f.k] ?? '', placeholder: f.def != null ? String(f.def).replace('.', ',') : (f.ph || '') }); inp.oninput = () => { raw[f.k] = inp.value.trim(); }; }
+        return h('div', { class: 'field pf' }, h('label', {}, f.l, f.u ? h('em', {}, ' ' + f.u) : null, f.need ? h('i', {}, ' *') : null), inp, f.hint ? h('small', {}, f.hint) : null);
+      }));
+      this.modal({ title: (idx != null ? 'Editar ' : 'Adicionar ') + C.one, body: form, wide: true, actions: [{ label: 'Cancelar' }, { label: 'Salvar', kind: 'primary', onClick: () => {
+        const miss = C.fields.filter(f => f.need && !isFinite(Proj.num(raw[f.k], NaN))); if (miss.length) { this.toast('Preencha: ' + miss.map(f => f.l).join(', '), 'bad'); return false; }
+        for (const f of C.fields) if (raw[f.k] == null || raw[f.k] === '') { if (f.def != null) raw[f.k] = String(f.def); }
+        if (idx != null) p.items[cat][idx] = raw; else p.items[cat].push(raw); save(); this.refresh(); } }] });
+    };
+    const desc = (cat, x) => {
+      const N = Proj.num;
+      return { amp: () => `${N(x.qty, 1)}× ${nf(N(x.rms, 0), 0)} W RMS · mín. ${nf(N(x.ohm, 2), 1)} Ω · ${nf(N(x.v, 12.6), 1)} V`, spk: () => `${N(x.qty, 1)}× ${nf(N(x.rms, 0), 0)} W · ${nf(N(x.ohm, 4), 1)} Ω · ${(PJ_CATS.spk.fields[1].sel.find(o => o[0] === x.kind) || [, ''])[1]}`,
+        bat: () => `${N(x.qty, 1)}× ${nf(N(x.v, 12), 1)} V ${nf(N(x.ah, 0), 0)} Ah · ${(BAT_TECH[x.tech] || BAT_TECH.agm).n}`, hv: () => `${N(x.qty, 1)}× ${nf(N(x.v, 0), 1)} V ${nf(N(x.a, 0), 0)} A`,
+        gen: () => `${nf(N(x.kva, 0), 1)} kVA · FP ${nf(N(x.pf, 0.8), 2)}`, rect: () => `${N(x.qty, 1)}× ${nf(N(x.a, 0), 0)} A`, cap: () => `${N(x.qty, 1)}× ${nf(N(x.v, 0), 2)} V ${nf(N(x.f, 0), 0)} F · ${N(x.s, 1)} em série`,
+        cab: () => `${nf(N(x.mm2, 0), 0)} mm² × ${N(x.par, 1)} · ${nf(N(x.len, 0), 1)} m · ${(MAT[x.mat] || MAT.cu).n}${x.fuse ? ' · fusível ' + x.fuse + ' A' : ''}` }[cat]();
+    };
+    const nameIn = h('input', { value: p.name, 'aria-label': 'Nome do projeto' }); nameIn.onchange = () => { p.name = nameIn.value.trim() || 'Meu som'; save(); };
+    const vIn = h('input', { type: 'text', inputmode: 'decimal', value: String(p.v).replace('.', ',') }); vIn.onchange = () => { p.v = Proj.num(vIn.value, 12.6); save(); this.refresh(); };
+    const regIn = h('select', { class: 'sel' }, REGIMES.map(([v, l]) => h('option', { value: v, selected: p.regime === v || null }, `${l} (${v.replace('.', ',')}%)`))); regIn.onchange = () => { p.regime = regIn.value; save(); this.refresh(); };
+    const report = () => {
+      const L = [`${CONFIG.APP} · Meu Projeto de Som`, `${p.name} — ${new Date().toLocaleString('pt-BR')}`, `Tensão do sistema: ${nf(p.v, 1)} V · Regime: ${p.regime}%`, ''];
+      for (const [k, C] of Object.entries(PJ_CATS)) if (p.items[k].length) { L.push(C.n.toUpperCase()); p.items[k].forEach(x => L.push(`• ${x.name ? x.name + ': ' : ''}${desc(k, x)}`)); L.push(''); }
+      L.push('RESULTADOS'); R.rows.forEach(r => L.push(`• ${r.l}: ${nf(r.v, r.d)} ${r.u} [${KIND[r.k][0]}]`));
+      if (R.alerts.length) { L.push('', 'DIAGNÓSTICO'); R.alerts.forEach(a => L.push(`• ${LVN[a.lv]}: ${a.t}`)); }
+      L.push('', 'MEMÓRIA DE CÁLCULO'); R.steps.forEach(s => L.push('• ' + s)); L.push('', `Gerado no ${CONFIG.APP} por ${CONFIG.BRAND}`); return L.join('\n');
+    };
+    this.main.append(this.crumbs(['Diamante', 'Meu Projeto de Som']),
+      h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Meu Projeto de Som'), h('p', {}, 'Cadastre o sistema inteiro: o app calcula potência, consumo, alimentação, cabos e aponta incompatibilidades.')),
+        h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap' } },
+          h('button', { class: 'btn', onclick: () => { const n = Proj.blank(); Proj.save(n); this._proj = n; cv.pid = n.id; this.refresh(); } }, ic('plus'), 'Novo projeto'),
+          all.length > 1 ? h('select', { class: 'sel', onchange: e => { this._proj = Proj.all().find(x => x.id === e.target.value); cv.pid = e.target.value; this.refresh(); } }, all.map(x => h('option', { value: x.id, selected: x.id === p.id || null }, x.name))) : null,
+          h('button', { class: 'btn ghost', onclick: async () => { if (await this.confirm('Apagar projeto?', `"${p.name}" será apagado deste aparelho.`)) { Proj.del(p.id); this._proj = null; cv.pid = null; this.refresh(); } } }, ic('trash'), 'Apagar'))),
+      h('div', { class: 'panel', style: { marginBottom: '14px' } }, h('div', { class: 'calc-form' },
+        h('div', { class: 'field' }, h('label', {}, 'Nome do projeto'), nameIn), h('div', { class: 'field' }, h('label', {}, 'Tensão do sistema (V)'), vIn), h('div', { class: 'field' }, h('label', {}, 'Como o som é usado'), regIn))),
+      h('div', { class: 'calc-wrap' },
+        h('div', {}, Object.entries(PJ_CATS).map(([k, C]) => h('div', { class: 'panel pj-cat' },
+          h('div', { class: 'pj-h' }, h('h3', {}, ic(C.icon), C.n, h('small', {}, ` (${p.items[k].length})`)), h('button', { class: 'btn ghost', onclick: () => editItem(k) }, ic('plus'), 'Adicionar')),
+          p.items[k].map((x, i) => h('div', { class: 'pj-it' }, h('button', { class: 'pj-txt', onclick: () => editItem(k, i) }, h('b', {}, x.name || C.one[0].toUpperCase() + C.one.slice(1)), h('small', {}, desc(k, x))),
+            iconBtn('trash', 'Remover', () => { p.items[k].splice(i, 1); save(); this.refresh(); })))))),
+        h('div', { class: 'panel pj-res' }, h('h3', {}, 'Diagnóstico do projeto'),
+          R.missing ? h('div', { class: 'calc-miss' }, ic('info'), R.missing) : [
+            h('div', { class: 'calc-rows' }, R.rows.map(r => h('div', { class: 'crow' }, h('span', {}, r.l), h('b', { class: 'num' }, nf(r.v, r.d), h('small', {}, ' ' + r.u)), h('i', { class: 'ktag ' + KIND[r.k][1] }, KIND[r.k][0])))),
+            h('div', { class: 'calc-alerts' }, R.alerts.map(a => h('div', { class: 'tip' }, h('span', { class: 'lv ' + a.lv }, LVN[a.lv]), h('div', {}, h('small', { style: { color: 'var(--ink)', fontSize: '13.5px' } }, a.t))))),
+            h('details', { class: 'calc-mem' }, h('summary', {}, 'Memória de cálculo'), h('ol', {}, R.steps.map(s => h('li', { class: 'num' }, s)))),
+            h('div', { class: 'calc-ref' }, R.refs.map(t => h('p', {}, t))),
+            h('div', { class: 'calc-act' }, h('button', { class: 'btn', onclick: () => this.go({ v: 'tool', id: '_ai' }) }, ic('spark'), 'Perguntar ao consultor'), h('button', { class: 'btn primary', onclick: () => Pro.share(p.name, report()) }, ic('chat'), 'Compartilhar relatório'))])));
+    if (!all.find(x => x.id === p.id)) save();
+  },
+  /* ---------- CONSULTOR TÉCNICO ---------- */
+  tAi() {
+    const log = this._aiLog || (this._aiLog = [{ who: 'ai', t: 'Olá! Sou o consultor técnico do STX Control. Posso analisar o seu projeto de som, a regulagem do processador, a tensão e as medições, e tirar dúvidas de elétrica e alinhamento. Toque numa sugestão ou escreva a pergunta.' }]);
+    const box = h('div', { class: 'ai-chat' });
+    const paint = () => { box.replaceChildren(...log.map(m => h('div', { class: 'ai-msg ' + m.who }, m.t.split('\n').map(l => h('p', {}, l)), m.go ? h('div', { class: 'sg-btns' }, m.go.map(([l, fn]) => h('button', { class: 'btn', onclick: fn }, l))) : null))); requestAnimationFrame(() => { box.scrollTop = box.scrollHeight; }); };
+    const ask = q => { if (!q.trim()) return; log.push({ who: 'me', t: q.trim() }); log.push(Consult.answer(q, this)); paint(); };
+    const inp = h('input', { placeholder: 'Ex.: que bitola usar para 400 A com 3 m?', 'aria-label': 'Pergunta' });
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { ask(inp.value); inp.value = ''; } });
+    const sugg = ['Analise meu projeto de som', 'Revise a regulagem do processador', 'Como está a tensão?', 'Analise minha última medição', 'Que bitola para 400 A e 3 m?', 'Quantos ultracaps de 3 V para 14,4 V?', 'Delay: alto-falante a 120 cm e outro a 90 cm', 'Meu som está distorcendo'];
+    this.main.append(this.crumbs(['Diamante', 'Consultor com IA']),
+      h('div', { class: 'view-head' }, h('div', {}, h('h1', {}, 'Consultor com IA'), h('p', {}, 'Especialista em som automotivo e paredão. Funciona no tablet, sem internet, usando os dados reais do seu projeto, do processador e das medições.')),
+        h('button', { class: 'btn ghost', onclick: () => { this._aiLog = null; this.refresh(); } }, ic('refresh'), 'Nova conversa')),
+      h('div', { class: 'chips', style: { marginBottom: '10px' } }, sugg.map(s => h('button', { class: 'chip', onclick: () => ask(s) }, s))),
+      box, h('div', { class: 'field cv-row ai-in' }, inp, h('button', { class: 'btn primary', onclick: () => { ask(inp.value); inp.value = ''; } }, 'Enviar')));
+    paint();
+  },
+});
+
+// motor do consultor: entende a pergunta, usa os dados do app e responde com números e o caminho para a ferramenta
+const Consult = {
+  num(q, re) { const m = q.match(re); return m ? parseFloat(m[1].replace(',', '.')) : null; },
+  answer(q, ui) {
+    const t = q.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const go = (l, v) => [l, () => ui.go(v)];
+    const has = (...w) => w.some(x => t.includes(x));
+    // distorção / problemas
+    if (has('distor', 'clip', 'estoura', 'chiado', 'esquent', 'queim', 'desliga', 'protecao')) {
+      const v = Player.volt;
+      return { who: 'ai', t: ['Causas mais comuns, na ordem:', `1. Tensão caindo nos picos${v != null ? ` (agora ${fmtV(v)}, mínima ${fmtV(Volt.min)})` : ''}: módulo em proteção ou distorcendo.`, '2. Ganho do amplificador alto demais (clipping): baixe o ganho e ajuste com o limitador do processador.', '3. Impedância abaixo do mínimo do módulo: confira a ligação dos falantes.', '4. Falta de passa-alta em médios/drivers: grave entrando onde não deve.', '5. Cabos/conexões: aterramento ruim, terminal frouxo, cabo fino.'].join('\n'), go: [go('Calculadora de limitador', { v: 'tool', id: 'limit' }), go('Amplificador + falantes', { v: 'tool', id: 'amp' }), ['Voltímetro', () => ui.voltPanel()]] };
+    }
+    // projeto
+    if (has('projeto', 'meu som', 'paredao', 'sistema')) {
+      const p = ui._proj || Proj.all()[0];
+      if (!p) return { who: 'ai', t: 'Você ainda não cadastrou um projeto. Abra "Meu Projeto de Som", cadastre amplificadores, falantes e a alimentação, e eu analiso tudo.', go: [go('Abrir Meu Projeto de Som', { v: 'proj' })] };
+      const R = Proj.analyze(p); if (R.missing) return { who: 'ai', t: R.missing, go: [go('Abrir Meu Projeto de Som', { v: 'proj' })] };
+      const rows = R.rows.slice(0, 6).map(r => `• ${r.l}: ${nf(r.v, r.d)} ${r.u} (${KIND[r.k][0].toLowerCase()})`);
+      const bad = R.alerts.filter(a => a.lv === 'p'), warn = R.alerts.filter(a => a.lv === 'a');
+      return { who: 'ai', t: [`Análise do projeto "${p.name}":`, ...rows, '', bad.length ? `⚠ ${bad.length} ponto(s) PERIGOSO(S):` : 'Nenhum ponto perigoso encontrado.', ...bad.map(a => '• ' + a.t), warn.length ? `Atenção (${warn.length}):` : '', ...warn.map(a => '• ' + a.t)].filter(Boolean).join('\n'), go: [go('Ver projeto completo', { v: 'proj' })] };
+    }
+    // regulagem
+    if (has('regulagem', 'processador', 'crossover', 'corte', 'revis')) {
+      const tips = Assist.diagnose(Dsp.s); const bad = tips.filter(x => x.lv === 'p' || x.lv === 'a');
+      return { who: 'ai', t: [Dsp.synced ? 'Revisei a regulagem lida do processador:' : 'Revisei a regulagem da tela (leia o processador para eu ver o que está gravado):', ...(bad.length ? bad.map(x => `• ${x.t} — ${x.d}`) : ['• Nada perigoso ou estranho na regulagem.'])].join('\n'), go: [go('Crossover e sobreposição', { v: 'tool', id: '_overlap' }), ['Abrir Ajustes IA', () => ui.switchTab('ia')]] };
+    }
+    // tensão
+    if (has('tensao', 'volt', 'bateria arriando', 'arriando')) {
+      const v = Player.volt; if (v == null) return { who: 'ai', t: 'Ainda não recebi a tensão do processador. Conecte ao STX e eu leio o voltímetro dele.' };
+      const lv = Volt.level(v), m = Volt.min, x = Volt.max;
+      return { who: 'ai', t: [`Agora: ${fmtV(v)} (MEDIDO pelo processador${Volt.cfg.offset ? `, com ajuste de ${fmtV(Volt.cfg.offset)}` : ''}). Mínima ${fmtV(m)} e máxima ${fmtV(x)} desde a conexão.`,
+        lv === 'bad' && v <= Volt.cfg.low ? 'A tensão está abaixo do seu limite: o banco não está dando conta. Confira alternador/fonte, bitola e conexões; a queda de tensão reduz a potência e esquenta os módulos.' : lv === 'bad' ? 'A tensão está acima do limite alto: confira a regulagem da fonte/alternador — tensão alta queima módulos e ultracaps.' : (m != null && v - m > 1.5) ? `A tensão caiu ${nf(v - m, 2)} V nos picos: sinal de cabo fino, conexão ruim ou alimentação no limite.` : 'Tensão dentro dos limites.'].join('\n'), go: [['Abrir voltímetro', () => ui.voltPanel()]] };
+    }
+    // medição
+    if (has('medicao', 'medi', 'rta', 'resposta', 'microfone')) {
+      const m = Meas.list()[0], BF = Assist.BANDS3.filter(f => f <= 20000), avg = Assist.averaged() || (m && m.bands);
+      if (!avg) return { who: 'ai', t: 'Não tenho medição ainda. Abra "Medição com microfone", ligue o ruído rosa e meça 10 s.', go: [go('Medição com microfone', { v: 'tool', id: '_meas' })] };
+      const fs = Meas.features(avg, BF);
+      return { who: 'ai', t: [`Medição ${Assist.averaged() ? 'atual' : `"${m.name}"`} (MEDIDO):`, ...(fs.length ? fs.map(x => `• ${fmtHz(x.f)}Hz ${x.k} de ${x.d > 0 ? '+' : ''}${x.d.toFixed(1)} dB → ${x.k === 'pico' ? 'corte com PEQ (Q 2–4)' : 'confira polaridade/delay antes de equalizar'}`) : ['• Nenhum pico ou cancelamento forte. Resposta equilibrada.'])].join('\n'), go: [go('Polaridade e fase', { v: 'tool', id: '_pol' }), ['Corrigir EQ (Ajustes IA)', () => ui.switchTab('ia')]] };
+    }
+    // bitola
+    if (has('bitola', 'cabo', 'mm2', 'mm²')) {
+      const I = this.num(t, /(\d+(?:[.,]\d+)?)\s*a\b/), L = this.num(t, /(\d+(?:[.,]\d+)?)\s*m\b/);
+      if (I) {
+        const a = nextUp(SEC_MM2, I / J_CABLE) || 300, len = L || 3, dv = rhoAt('cu', 50) * len * 2 / a * I, V = 12.6;
+        return { who: 'ai', t: [`Para ${nf(I, 0)} A: bitola mínima ${a} mm² de cobre (referência de ${J_CABLE} A/mm² em uso contínuo — CALCULADO).`, `Com ${nf(len, 1)} m (ida) a queda fica ~${nf(dv, 2)} V (${nf(dv / V * 100, 1)}% em 12,6 V)${dv / V > 0.03 ? ': acima de 3%, suba uma bitola ou use cabos em paralelo' : ''}.`, `Fusível: ${nextUp(FUSES, I * 1.25)} A perto da bateria. Cabo CCA precisa de ~1,6× a seção do cobre.`].join('\n'), go: [go('Calculadora de cabo + fusível', { v: 'tool', id: 'cable' })] };
+      }
+      return { who: 'ai', t: 'Me diga a corrente e o comprimento, ex.: "bitola para 300 A com 4 m".', go: [go('Calculadora de cabo + fusível', { v: 'tool', id: 'cable' })] };
+    }
+    // ultracapacitores
+    if (has('ultracap', 'ultra cap', 'supercap', 'capacitor')) {
+      const vc = this.num(t, /(\d+(?:[.,]\d+)?)\s*v\b/) || 3, target = this.num(t, /para\s*(\d+(?:[.,]\d+)?)/) || 14.4;
+      const n = Math.ceil(target * 1.05 / vc);
+      return { who: 'ai', t: [`Para trabalhar em ${nf(target, 1)} V com células de ${nf(vc, 2)} V: ${n} em série (${nf(n * vc, 1)} V de máximo, com ~5% de folga — CALCULADO).`, 'Cada célula precisa de placa de balanceamento. Com 3000 F: capacitância do conjunto = 3000 ÷ ' + n + ' = ' + nf(3000 / n, 0) + ' F.', 'Carregue com pré-carga (resistor) para não dar faísca nem queimar fusível.'].join('\n'), go: [go('Banco de ultracapacitores', { v: 'tool', id: 'ucap' }), go('Pré-carga', { v: 'tool', id: 'prech' })] };
+    }
+    // delay
+    if (has('delay', 'atraso', 'distancia')) {
+      const ns = [...t.matchAll(/(\d+(?:[.,]\d+)?)\s*cm/g)].map(m => parseFloat(m[1].replace(',', '.')));
+      if (ns.length >= 2) { const c = 345.7, mx = Math.max(...ns); return { who: 'ai', t: ['Delay calculado (25 °C, c = 345,7 m/s):', ...ns.map(d => `• ${nf(d, 0)} cm → ${nfx((mx - d) / 100 / c * 1000, 2)} ms`), 'O falante mais longe fica em 0 ms.'].join('\n'), go: [go('Delay por distância', { v: 'tool', id: '_delay' })] }; }
+      return { who: 'ai', t: 'Meça com a trena cada falante até a cabeça do motorista e me diga, ex.: "delay: 120 cm, 95 cm e 80 cm".', go: [go('Delay por distância', { v: 'tool', id: '_delay' })] };
+    }
+    // fórmulas rápidas
+    if (has('kva', 'gerador')) return { who: 'ai', t: 'kW = kVA × fator de potência (0,8 típico). Corrente monofásica: I = kVA × 1000 ÷ V. Para som, dimensione o gerador para o consumo médio + 25% e a ponte retificadora para 1,5× a corrente.', go: [go('Gerador: kVA, kW e corrente', { v: 'tool', id: 'gen' }), go('Ponte retificadora', { v: 'tool', id: 'rect' })] };
+    if (has('bateria', 'autonomia', 'ah')) return { who: 'ai', t: 'Série soma tensão; paralelo soma Ah. Energia útil = V × Ah × profundidade de descarga (50% chumbo-ácido, 90% LiFePO4). Autonomia = energia útil ÷ consumo médio (e ainda menor em descarga forte, efeito Peukert).', go: [go('Banco de baterias', { v: 'tool', id: 'bat' })] };
+    if (has('impedancia', 'ohm', 'ligacao', 'serie', 'paralelo')) return { who: 'ai', t: 'Falantes iguais em série: Z = n × Z. Em paralelo: Z = Z ÷ n. Nunca fique abaixo da impedância mínima do amplificador. A potência que o módulo entrega muda com a impedância — veja a calculadora.', go: [go('Amplificador + falantes', { v: 'tool', id: 'amp' })] };
+    if (has('limitador', 'limiter', 'proteger', 'driver', 'tweeter')) return { who: 'ai', t: 'Limitador: tensão máxima = √(P × R). Ex.: driver de 100 W RMS em 8 Ω → √(100×8) = 28,3 V. Ajuste o limitador da saída para não passar disso, e use passa-alta adequado.', go: [go('Calculadora de limitador', { v: 'tool', id: 'limit' })] };
+    if (has('pre-carga', 'precarga', 'faisca')) return { who: 'ai', t: 'Pré-carga: um resistor entre o banco e os capacitores limita a corrente de ligação. Corrente inicial = V ÷ R; carga em ~5 × R × C segundos. Depois feche o contator/chave de bypass.', go: [go('Pré-carga de capacitores', { v: 'tool', id: 'prech' })] };
+    if (has('oi', 'ola', 'bom dia', 'boa tarde', 'boa noite')) return { who: 'ai', t: 'Olá! Me diga o que você quer analisar: projeto, regulagem, tensão, medição, bitola, ultracaps ou delay.' };
+    return { who: 'ai', t: 'Não entendi bem. Posso: analisar seu projeto de som, revisar a regulagem do processador, ler a tensão, interpretar medições, calcular bitola e fusível, ultracapacitores, delay, gerador e baterias. Tente, por exemplo: "bitola para 250 A com 5 m".', go: [go('Meu Projeto de Som', { v: 'proj' }), go('Medição com microfone', { v: 'tool', id: '_meas' })] };
+  },
+};
 
 })();
 </script>
