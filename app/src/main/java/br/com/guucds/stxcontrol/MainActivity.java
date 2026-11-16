@@ -3,6 +3,7 @@ package br.com.guucds.stxcontrol;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
+import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -33,16 +35,22 @@ import java.util.List;
 public class MainActivity extends Activity {
     static final String TAG = "STXAPP";
     static final String HOME = "https://appassets.androidplatform.net/assets/www/index.html";
-    private static final int REQ_PERM = 7, REQ_FILE = 8;
+    private static final int REQ_PERM = 7, REQ_FILE = 8, REQ_MIC = 9;
 
     WebView web;
     BleBridge ble;
     private ValueCallback<Uri[]> fileCb;
+    private PermissionRequest pendingMic;
+    int guardFlags = 0;
+    boolean debuggable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        debuggable = (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        Lg.on = debuggable;
+        guardFlags = Guard.check(this);
         immersive();
 
         web = new WebView(this);
@@ -55,6 +63,12 @@ public class MainActivity extends Activity {
         s.setDatabaseEnabled(true);
         s.setMediaPlaybackRequiresUserGesture(false);
         s.setAllowFileAccess(false);
+        s.setAllowContentAccess(false);
+        s.setAllowFileAccessFromFileURLs(false);
+        s.setAllowUniversalAccessFromFileURLs(false);
+        s.setGeolocationEnabled(false);
+        s.setSaveFormData(false);
+        WebView.setWebContentsDebuggingEnabled(false);
         s.setSupportMultipleWindows(false);
         s.setTextZoom(100);
         s.setUserAgentString(s.getUserAgentString() + " STXControlApp/" + BuildConfigVersion.name(this));
@@ -74,7 +88,7 @@ public class MainActivity extends Activity {
                 Uri u = req.getUrl();
                 if ("appassets.androidplatform.net".equals(u.getHost())) return false;
                 // WhatsApp, Instagram, Google Imagens etc.: abre no app certo
-                try { startActivity(new Intent(Intent.ACTION_VIEW, u)); } catch (Exception e) { Log.w(TAG, "link: " + e); }
+                try { startActivity(new Intent(Intent.ACTION_VIEW, u)); } catch (Exception e) { Lg.w(TAG, "link: " + e); }
                 return true;
             }
         });
@@ -82,8 +96,26 @@ public class MainActivity extends Activity {
         web.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage m) {
-                Log.d("STXJS", m.message() + " (" + m.lineNumber() + ")");
+                if (debuggable) Lg.d("STXJS", m.message() + " (" + m.lineNumber() + ")");
                 return true;
+            }
+
+            // Microfone (RTA, medições, Ajustes IA): o WebView só libera se o Android também liberar
+            @Override
+            public void onPermissionRequest(final PermissionRequest req) {
+                runOnUiThread(() -> {
+                    boolean trusted = req.getOrigin() != null && "appassets.androidplatform.net".equals(req.getOrigin().getHost());
+                    boolean wantsMic = false;
+                    for (String r : req.getResources()) if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(r)) wantsMic = true;
+                    if (!trusted || !wantsMic) { req.deny(); return; }
+                    if (Build.VERSION.SDK_INT < 23 || checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                        req.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});
+                    } else {
+                        if (pendingMic != null) pendingMic.deny();
+                        pendingMic = req;
+                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQ_MIC);
+                    }
+                });
             }
 
             @Override
@@ -102,6 +134,12 @@ public class MainActivity extends Activity {
         ble = new BleBridge(this);
         web.addJavascriptInterface(ble, "StxNative");
         askPermissions();
+        if ((guardFlags & (Guard.BAD_SIG | Guard.BAD_WEB)) != 0) {
+            web.loadData("<body style='background:#07090d;color:#fff;font-family:sans-serif;text-align:center;padding:12vh 8vw'>"
+                    + "<h2>Versão modificada</h2><p>Este aplicativo foi alterado e não é a versão original do STX Control.<br>"
+                    + "Baixe o app oficial com @guucds.</p></body>", "text/html", "utf-8");
+            return;
+        }
         web.loadUrl(HOME);
     }
 
@@ -142,6 +180,15 @@ public class MainActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int code, String[] perms, int[] res) {
         super.onRequestPermissionsResult(code, perms, res);
+        if (code == REQ_MIC) {
+            if (pendingMic != null) {
+                if (res.length > 0 && res[0] == PackageManager.PERMISSION_GRANTED)
+                    pendingMic.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});
+                else pendingMic.deny();
+                pendingMic = null;
+            }
+            return;
+        }
         ble.emit("perm", hasPermissions() ? "ok" : "denied");
     }
 

@@ -84,6 +84,15 @@ public class BleBridge {
         return b;
     }
 
+    @JavascriptInterface public int guard() { return act.guardFlags; }
+    // ID fixo do aparelho (não muda ao limpar dados nem ao reinstalar com a mesma assinatura): base da licença
+    @JavascriptInterface public String deviceId() {
+        try {
+            String id = android.provider.Settings.Secure.getString(act.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            byte[] d = java.security.MessageDigest.getInstance("SHA-256").digest(((id == null ? "" : id) + ":" + act.getPackageName()).getBytes("UTF-8"));
+            return Guard.hex(d).substring(0, 32);
+        } catch (Exception e) { return ""; }
+    }
     @JavascriptInterface public String version() { return BuildConfigVersion.name(act); }
     @JavascriptInterface public boolean available() { return adapter != null; }
     @JavascriptInterface public boolean enabled() { return adapter != null && adapter.isEnabled(); }
@@ -93,10 +102,10 @@ public class BleBridge {
     @JavascriptInterface public String lastName() { return prefs.getString("name", ""); }
     @JavascriptInterface public void forget() { prefs.edit().remove("addr").remove("name").apply(); }
     @JavascriptInterface public boolean isReady() { return ready; }
-    @JavascriptInterface public void log(String msg) { Log.i(TAG, "JS " + msg); }
+    @JavascriptInterface public void log(String msg) { Lg.i(TAG, "JS " + msg); }
 
     @JavascriptInterface public void enableBluetooth() {
-        main.post(() -> { try { act.startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)); } catch (Exception e) { Log.w(TAG, "enable: " + e); } });
+        main.post(() -> { try { act.startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)); } catch (Exception e) { Lg.w(TAG, "enable: " + e); } });
     }
 
     @JavascriptInterface public void openSettings() {
@@ -125,7 +134,7 @@ public class BleBridge {
                 @Override public void onScanFailed(int code) { emit("scanerr", "fail-" + code); }
             };
             ScanSettings st = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
-            try { scanner.startScan(null, st, scanCb); Log.i(TAG, "scan start"); }
+            try { scanner.startScan(null, st, scanCb); Lg.i(TAG, "scan start"); }
             catch (Exception e) { emit("scanerr", String.valueOf(e.getMessage())); }
             main.postDelayed(this::stopScanInternal, 15000);
         });
@@ -140,6 +149,7 @@ public class BleBridge {
 
     // ---------- conexão ----------
     @JavascriptInterface public void connect(final String addr) {
+        if ((act.guardFlags & (Guard.BAD_SIG | Guard.BAD_WEB)) != 0) return;
         main.post(() -> {
             stopScanInternal();
             if (adapter == null || !adapter.isEnabled()) { emit("state", "off:bluetooth-off"); return; }
@@ -148,7 +158,7 @@ public class BleBridge {
             manual = false; address = addr;
             BluetoothDevice dev;
             try { dev = adapter.getRemoteDevice(addr); } catch (Exception e) { emit("state", "off:bad-address"); return; }
-            Log.i(TAG, "connect " + addr);
+            Lg.i(TAG, "connect " + addr);
             emit("state", "connecting");
             if (Build.VERSION.SDK_INT >= 23) gatt = dev.connectGatt(act, false, cb, BluetoothDevice.TRANSPORT_LE);
             else gatt = dev.connectGatt(act, false, cb);
@@ -170,7 +180,7 @@ public class BleBridge {
 
     private final BluetoothGattCallback cb = new BluetoothGattCallback() {
         @Override public void onConnectionStateChange(BluetoothGatt g, int status, int state) {
-            Log.i(TAG, "connState status=" + status + " state=" + state);
+            Lg.i(TAG, "connState status=" + status + " state=" + state);
             if (g != gatt) return;
             if (state == BluetoothProfile.STATE_CONNECTED) {
                 main.post(() -> { if (gatt != null) gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH); });
@@ -184,14 +194,14 @@ public class BleBridge {
         }
 
         @Override public void onMtuChanged(BluetoothGatt g, int mtu, int status) {
-            Log.i(TAG, "mtu " + mtu + " status=" + status);
+            Lg.i(TAG, "mtu " + mtu + " status=" + status);
             main.post(() -> { if (g == gatt) g.discoverServices(); });
         }
 
         @Override public void onServicesDiscovered(BluetoothGatt g, int status) {
             if (g != gatt) return;
             BluetoothGattService s = g.getService(SVC);
-            if (s == null) { Log.w(TAG, "service 0427 missing"); emit("state", "off:no-service"); main.post(() -> closeGatt()); return; }
+            if (s == null) { Lg.w(TAG, "service 0427 missing"); emit("state", "off:no-service"); main.post(() -> closeGatt()); return; }
             txChar = s.getCharacteristic(TX); rxChar = s.getCharacteristic(RX);
             if (txChar == null || rxChar == null) { emit("state", "off:no-char"); main.post(() -> closeGatt()); return; }
             g.setCharacteristicNotification(rxChar, true);
@@ -201,7 +211,7 @@ public class BleBridge {
         }
 
         @Override public void onDescriptorWrite(BluetoothGatt g, BluetoothGattDescriptor d, int status) {
-            Log.i(TAG, "cccd status=" + status);
+            Lg.i(TAG, "cccd status=" + status);
             finishOp(status);
             markReady();
         }
@@ -229,7 +239,7 @@ public class BleBridge {
             String name = gatt.getDevice().getName();
             prefs.edit().putString("addr", gatt.getDevice().getAddress()).putString("name", name == null ? "STX" : name).apply();
         }
-        Log.i(TAG, "ready");
+        Lg.i(TAG, "ready");
         emit("state", "ready");
     }
 
@@ -237,7 +247,7 @@ public class BleBridge {
         if (v == null) return;
         String h = hex(v);
         // os avisos de tensão chegam várias vezes por segundo: não poluem o logcat
-        if (!(v.length > 1 && (v[1] & 255) == 0xCB)) Log.d(TAG, "RX " + h);
+        if (!(v.length > 1 && (v[1] & 255) == 0xCB)) Lg.d(TAG, "RX " + h);
         emit("data", h);
     }
 
@@ -266,7 +276,7 @@ public class BleBridge {
         try {
             if (gatt == null) ok = false;
             else if (op.kind == 0) {
-                Log.d(TAG, "TX " + hex(op.data));
+                Lg.d(TAG, "TX " + hex(op.data));
                 if (Build.VERSION.SDK_INT >= 33) ok = gatt.writeCharacteristic(txChar, op.data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT) == 0;
                 else { txChar.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT); txChar.setValue(op.data); ok = gatt.writeCharacteristic(txChar); }
             } else {
@@ -274,10 +284,10 @@ public class BleBridge {
                 if (Build.VERSION.SDK_INT >= 33) ok = gatt.writeDescriptor(d, op.data) == 0;
                 else { d.setValue(op.data); ok = gatt.writeDescriptor(d); }
             }
-        } catch (Exception e) { Log.w(TAG, "write ex " + e); }
+        } catch (Exception e) { Lg.w(TAG, "write ex " + e); }
         if (!ok) { finishOp(-3); if (op.kind == 1) markReady(); return; }
         final Op mine = op;
-        opTimeout = () -> { synchronized (queue) { if (current != mine) return; } Log.w(TAG, "op timeout"); finishOp(-4); };
+        opTimeout = () -> { synchronized (queue) { if (current != mine) return; } Lg.w(TAG, "op timeout"); finishOp(-4); };
         main.postDelayed(opTimeout, 2500);
     }
 
