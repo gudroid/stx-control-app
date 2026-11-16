@@ -17,9 +17,15 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
+      - name: Gravar impressão digital do app web (anti-adulteração)
+        run: |
+          H=$(sha256sum app/src/main/assets/www/index.html | cut -d' ' -f1)
+          sed -i "s/WEB_SHA256 = \"[0-9a-f]*\"/WEB_SHA256 = \"$H\"/" app/src/main/java/br/com/guucds/stxcontrol/Integrity.java
+          grep WEB_SHA256 app/src/main/java/br/com/guucds/stxcontrol/Integrity.java
       - name: Compilar
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
+          STX_KS_PASS: ${{ secrets.STX_KS_PASS }}
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null || true
           gradle :app:assembleRelease --no-daemon --stacktrace
