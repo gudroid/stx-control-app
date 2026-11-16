@@ -11,10 +11,18 @@ android {
         versionName "1.0.${run}"
     }
     signingConfigs {
-        release { storeFile file('../stx-release.jks'); storePassword 'stxcontrol2026'; keyAlias 'stx'; keyPassword 'stxcontrol2026' }
+        // senha vem do Secret do GitHub (STX_KS_PASS); o valor antigo só serve de reserva para compilar local
+        def pw = System.getenv('STX_KS_PASS') ?: 'stxcontrol2026'
+        release { storeFile file('../stx-release.jks'); storePassword pw; keyAlias 'stx'; keyPassword pw }
     }
     buildTypes {
-        release { minifyEnabled false; signingConfig signingConfigs.release }
+        release {
+            minifyEnabled true          // R8: ofusca/encurta nomes de classes e métodos e remove código não usado
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
+            signingConfig signingConfigs.release
+        }
         debug { signingConfig signingConfigs.release }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
