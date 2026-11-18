@@ -1,5 +1,11 @@
 plugins { id 'com.android.application' }
 def run = (System.getenv('GITHUB_RUN_NUMBER') ?: '1') as Integer
+
+// Senha da chave de assinatura: vem SÓ do Secret do GitHub (STX_KS_PASS). Nunca fica no repositório.
+// O arquivo da chave (stx-release.jks) é recriado pelo GitHub a partir do Secret STX_KS_B64 na hora de compilar.
+def ksPass = System.getenv('STX_KS_PASS')
+def ksFile = file(System.getenv('STX_KS_FILE') ?: '../stx-release.jks')
+
 android {
     namespace 'br.com.guucds.stxcontrol'
     compileSdk 34
@@ -11,9 +17,10 @@ android {
         versionName "1.0.${run}"
     }
     signingConfigs {
-        // senha vem do Secret do GitHub (STX_KS_PASS); o valor antigo só serve de reserva para compilar local
-        def pw = System.getenv('STX_KS_PASS') ?: 'stxcontrol2026'
-        release { storeFile file('../stx-release.jks'); storePassword pw; keyAlias 'stx'; keyPassword pw }
+        // Só configura a assinatura oficial quando a senha existe (no GitHub). Sem a senha, nem monta a config.
+        if (ksPass) {
+            release { storeFile ksFile; storePassword ksPass; keyAlias 'stx'; keyPassword ksPass }
+        }
     }
     buildTypes {
         release {
@@ -21,9 +28,11 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable false
-            signingConfig signingConfigs.release
+            // assina com a chave oficial quando a senha está disponível (build no GitHub); senão o Gradle avisa
+            if (ksPass) signingConfig signingConfigs.release
         }
-        debug { signingConfig signingConfigs.release }
+        // build de teste (debug) usa a chave de depuração padrão do Android, NUNCA a chave oficial
+        debug { debuggable true }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
 }

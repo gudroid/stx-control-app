@@ -9,4 +9,6 @@
 -repackageclasses ''
 -allowaccessmodification
 -overloadaggressively
+# remove todas as chamadas de log do APK final (Android e o nosso wrapper Lg): nenhuma pista no logcat
 -assumenosideeffects class android.util.Log { *; }
+-assumenosideeffects class br.com.guucds.stxcontrol.Lg { static *; }
