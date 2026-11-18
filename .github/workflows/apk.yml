@@ -17,6 +17,18 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
+      - name: Recriar a chave de assinatura a partir do Secret (fora do repositório)
+        env:
+          STX_KS_B64: ${{ secrets.STX_KS_B64 }}
+        run: |
+          if [ -n "$STX_KS_B64" ]; then
+            echo "$STX_KS_B64" | base64 -d > stx-release.jks
+            echo "Chave recriada a partir do Secret STX_KS_B64."
+          elif [ -f stx-release.jks ]; then
+            echo "Usando stx-release.jks do repositório (recomendado migrar para o Secret STX_KS_B64)."
+          else
+            echo "ERRO: sem chave de assinatura. Configure o Secret STX_KS_B64." && exit 1
+          fi
       - name: Gravar impressão digital do app web (anti-adulteração)
         run: |
           H=$(sha256sum app/src/main/assets/www/index.html | cut -d' ' -f1)
@@ -27,8 +39,12 @@ jobs:
           ANDROID_HOME: /usr/local/lib/android/sdk
           STX_KS_PASS: ${{ secrets.STX_KS_PASS }}
         run: |
+          if [ -z "$STX_KS_PASS" ]; then echo "ERRO: Secret STX_KS_PASS nao configurado." && exit 1; fi
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null || true
           gradle :app:assembleRelease --no-daemon --stacktrace
+      - name: Apagar a chave do runner
+        if: always()
+        run: rm -f stx-release.jks
       - name: Renomear
         run: cp app/build/outputs/apk/release/app-release.apk STX-Control.apk
       - uses: actions/upload-artifact@v4
